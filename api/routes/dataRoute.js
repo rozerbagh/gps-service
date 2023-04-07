@@ -23,26 +23,28 @@ router.get('/',(req,res,next) => {
 
 
 // create data or add new data to db 
-router.post('/',(req,res,next) => {
-    // format data
-    const data = new Data({
-        data: req.body.data,
-        timestamp:Date.now()
+router.post("/", async (req, res, next) => {
+  console.log(req.body);
+  // format data
+  const data = new Data({
+    data: req.body.data,
+    timestamp: Date.now(),
+  });
+  // save data
+  data
+    .save()
+    .then((result) => {
+      res.status(201).json({
+        message: "data stored succesfully on db",
+        data: result,
+      });
     })
-    // save data
-    data.save()
-    .then(result =>{
-        res.status(201).json({
-            message:'data stored succesfully on db',
-            data:result
-        })
-    })
-    .catch(err => {
-        console.log(err)
-        res.status(500).json({
-            error:err
-        });
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
     });
-})
+});
 
 module.exports = router;
