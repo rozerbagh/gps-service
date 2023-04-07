@@ -7,7 +7,7 @@ const Data = require('./api/models/dataModel')
 const dataRouter = require('./api/routes/dataRoute');
 
 // m-lab mongo connection
-mongoose.connect('mongodb://ambeedev:ambeedev1@ds151293.mlab.com:51293/heroku_gvsq2gkn',{ useNewUrlParser : true });
+mongoose.connect('mongodb://adminrozerapp:19Vicky93%408050849022@143.244.128.159:27017/gpsdevice',{ useNewUrlParser : true });
 
 // mongodb://ambeedev:ambeedev1@ds151293.mlab.com:51293/heroku_gvsq2gkn
 // localhost mongo connection
