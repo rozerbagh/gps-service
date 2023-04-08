@@ -12,7 +12,6 @@ const io = new Server(server, {
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
   },
 });
-
 io.on("connection", (socket) => {
   // ...
   console.log(":::: wss has been connected ::::", socket);
@@ -34,5 +33,6 @@ io.on("new_namespace", (namespace) => {
   console.log(namespace.name);
 });
 
-server.listen(port);
-// webSocketServer.listen(8800);
+// server.listen(port);
+
+io.listen(8800);
