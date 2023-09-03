@@ -56,10 +56,10 @@ app.get("/", (req, res, next) => {
   });
 });
 app.post("/", (req, res, next) => {
+  console.log(req,res);
   res.status(200).json({
     message: ".....server is running",
     credit: "powered by -Ambee",
-    res,
     req,
   });
 });
