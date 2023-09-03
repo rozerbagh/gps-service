@@ -55,6 +55,14 @@ app.get("/", (req, res, next) => {
     credit: "powered by -Ambee",
   });
 });
+app.post("/", (req, res, next) => {
+  res.status(200).json({
+    message: ".....server is running",
+    credit: "powered by -Ambee",
+    res,
+    req,
+  });
+});
 
 app.use("/api/v1/data", dataRouter);
 
