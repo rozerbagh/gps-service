@@ -50,6 +50,7 @@ app.use((req, res, next) => {
 
 // welcome api on '/' route
 app.get("/", (req, res, next) => {
+  console.log(req.body, req.query, req.params);
   res.status(200).json({
     message: ".....server is running",
     credit: "powered by -Ambee",
