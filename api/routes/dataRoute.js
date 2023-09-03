@@ -24,7 +24,7 @@ router.get('/',(req,res,next) => {
 
 // create data or add new data to db 
 router.post("/", async (req, res, next) => {
-  console.log(req);
+  console.log(req.body, req.query, req.params);
   // format data
   const data = new Data({
     data: req.body.data,
