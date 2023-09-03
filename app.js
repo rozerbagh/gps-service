@@ -50,14 +50,14 @@ app.use((req, res, next) => {
 
 // welcome api on '/' route
 app.get("/", (req, res, next) => {
-  console.log(req.body, req.query, req.params);
+  console.log(":::: get requests ::::",req.body, req.query, req.params);
   res.status(200).json({
     message: ".....server is running",
     credit: "powered by -Ambee",
   });
 });
 app.post("/", (req, res, next) => {
-  console.log(req.body, req.query, req.params);
+  console.log(":::: post requests ::::", req.body, req.query, req.params);
   res.status(200).json({
     message: ".....server is running",
     credit: "powered by -Ambee",
