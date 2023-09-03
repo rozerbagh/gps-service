@@ -4,8 +4,8 @@
   "description": "this is a beckend service for sending data from device to db",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "server": "node server.js"
+    "start": "nodemon devicecServer.js",
+    "server": "node devicecServer.js"
   },
   "author": "Devil1165",
   "license": "ISC",
