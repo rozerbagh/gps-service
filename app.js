@@ -65,6 +65,14 @@ app.post("/", (req, res, next) => {
   });
 });
 
+// Create a route to handle incoming GPS data
+app.post('/gps', (req, res) => {
+  const gpsData = req.body; // Assuming Sinotrack sends JSON data
+  console.log('Received GPS data:', gpsData);
+  // Process the GPS data as needed
+  res.sendStatus(200); // Send a response to the tracker
+});
+
 app.use("/api/v1/data", dataRouter);
 
 module.exports = app;
