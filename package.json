@@ -13,7 +13,10 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.3.9",
+    "net": "^1.0.2",
+    "node-gpsd": "^0.3.4",
     "nodemon": "^2.0.22",
+    "serialport": "^12.0.0",
     "socket.io": "^4.6.1"
   }
 }
