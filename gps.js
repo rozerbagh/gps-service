@@ -8,7 +8,7 @@ const server = net.createServer((socket) => {
   // Listen for data from the GPS tracker.
   socket.on("data", (data) => {
     const gpsData = data.toString("utf8"); // Convert the binary data to a string.
-    console.log("GPS Data:", gpsData);
+    console.log("GPS Data:", gpsData, data);
 
     // Here, you can parse and process the GPS data as needed.
     // For example, you can split the data into fields and extract information.

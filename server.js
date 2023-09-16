@@ -1,4 +1,4 @@
-const port = process.env.PORT || 8800;
+const port = process.env.PORT || 3005;
 const http = require("http");
 const app = require("./app");
 const { Server } = require("socket.io");
