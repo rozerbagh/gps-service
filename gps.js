@@ -15,12 +15,14 @@ const gpsDataFunc = (gpsData) => {
     const date = fields[3];
     const time = fields[9];
 
+    console.log(`===========================`);
     console.log(`Identifier: ${identifier}`);
     console.log(`Latitude: ${latitude}`);
     console.log(`Longitude: ${longitude}`);
     console.log(`Speed: ${speed}`);
     console.log(`Date: ${date}`);
     console.log(`Time: ${time}`);
+    console.log(`===========================`);
   } catch (error) {
     console.log(error);
   }
@@ -31,6 +33,7 @@ const server = net.createServer((socket) => {
   // Listen for data from the GPS tracker.
   socket.on("data", (data) => {
     const gpsData = data.toString("utf8"); // Convert the binary data to a string.
+    console.log("Got GPS tracker data.", gpsData);
     gpsDataFunc(gpsData);
     // Here, you can parse and process the GPS data as needed.
     // For example, you can split the data into fields and extract information.
