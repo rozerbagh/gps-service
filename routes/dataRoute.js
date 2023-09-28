@@ -1,28 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Data = require('../models/dataModel')
-
+const Data = require("../models/dataModel");
 
 // getting all the data from db
-router.get('/',(req,res,next) => {
-    Data.find()
-    .select('_id data timestamp')
-    .then(result => {
-        res.status(200).json({
-            message:"all data fetched from db",
-            data:result
-        })
+router.get("/", (req, res, next) => {
+  Data.find()
+    .select("_id data timestamp")
+    .then((result) => {
+      res.status(200).json({
+        message: "all data fetched from db",
+        data: result,
+      });
     })
-    .catch(err => {
-        console.log(err)
-        res.status(500).json({
-            error:err
-        });
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
     });
-})
+});
 
-
-// create data or add new data to db 
+// create data or add new data to db
 router.post("/", async (req, res, next) => {
   console.log(req.body, req.query, req.params);
   // format data

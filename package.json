@@ -10,8 +10,10 @@
   "author": "Devil1165",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.3.9",
     "net": "^1.0.2",
     "node-gpsd": "^0.3.4",

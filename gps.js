@@ -1,7 +1,7 @@
 const net = require("net");
-
-const SERVER_PORT = 3005; // Set the port you want to listen on.
-
+const app = require("./app");
+const SOCKET_SERVER_PORT = 3005; // Set the port you want to listen on.
+const HTTP_SERVER_PORT = 3006;
 const gpsDataFunc = (gpsData) => {
   try {
     // Split the data by commas
@@ -27,13 +27,14 @@ const gpsDataFunc = (gpsData) => {
     console.log(error);
   }
 };
-const server = net.createServer((socket) => {
+const httpserver = http.createServer(app);
+const socketserver = net.createServer((socket) => {
   console.log("GPS tracker connected.");
 
   // Listen for data from the GPS tracker.
   socket.on("data", (data) => {
     const gpsData = data.toString("utf8"); // Convert the binary data to a string.
-    console.log("Got GPS tracker data.", gpsData);
+    console.log("Got GPS tracker data.", new Date().getTime(), gpsData);
     gpsDataFunc(gpsData);
     // Here, you can parse and process the GPS data as needed.
     // For example, you can split the data into fields and extract information.
@@ -49,6 +50,10 @@ const server = net.createServer((socket) => {
   });
 });
 
-server.listen(SERVER_PORT, () => {
-  console.log(`GPS server is listening on port ${SERVER_PORT}`);
+socketserver.listen(SOCKET_SERVER_PORT, () => {
+  console.log(`GPS socket server is listening on port ${SOCKET_SERVER_PORT}`);
+});
+
+httpserver.listen(HTTP_SERVER_PORT, () => {
+  console.log(`GPS http server is listening on port ${HTTP_SERVER_PORT}`);
 });
