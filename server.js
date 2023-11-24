@@ -2,7 +2,7 @@ const port = process.env.PORT || 8800;
 const http = require("http");
 const { websocketConnection } = require("./socket_server");
 const { app, websockets } = require("./app");
-const SOCKET_SERVER_PORT = 3005; // Set the port you want to listen on.
+const SOCKET_SERVER_PORT = 3003; // Set the port you want to listen on.
 const HTTP_SERVER_PORT = 3006;
 
 const httpserver = http.createServer(app);
