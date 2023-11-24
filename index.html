@@ -31,7 +31,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const ws = new WebSocket("ws://localhost:3006");
+    const ws = new WebSocket("ws://143.244.128.159:3006");
 
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened.");
@@ -40,12 +40,28 @@
       ws.send("Hello, server! This is the browser.");
     });
 
+    // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       console.log("Received message from server:", event.data);
-      // Handle the message received from the server
+      const gpsData = event.data.toString("utf8"); // Convert the binary data to a string.
+      const fields = gpsData.split(",");
+
+      // Extract relevant fields
+      const identifier = fields[1];
+      const latitude = fields[5];
+      const longitude = fields[7];
+      const speed = fields[8];
+      const date = fields[3];
+      const time = fields[9];
+      // console.log(
+      //   identifier,
+      //   "Got GPS tracker data.",
+      //   new Date().getTime(),
+      //   gpsData.split(",")
+      // );
     });
     document.getElementById("msgbtn").addEventListener("click", (e) => {
-      const ws = new WebSocket("ws://localhost:3006");
+      const ws = new WebSocket("ws://143.244.128.159:3006");
 
       ws.addEventListener("open", () => {
         console.log("WebSocket connection opened.");

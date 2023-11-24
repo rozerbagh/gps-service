@@ -70,7 +70,6 @@ function websocketConnection(httpserver) {
 
       // Forward data to WebSocket clients
       wss.clients.forEach((client) => {
-        console.log(client);
         if (client.readyState === WebSocket.OPEN) {
           client.send(data);
         }
