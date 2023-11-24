@@ -1,63 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const dataController = require("../controllers/data.controller");
-// const funcController = require("../controllers/function.controller");
+const funcController = require("../controllers/function.controller");
 const { checkToken } = require("../middlewares/auth.middleware");
-// const Orders = require("../models/orders.schema");
-// const Testimonials = require("../models/testimonials.schema");
-// const Setting = require("../models/setting.model");
+const Schools = require("../models/schools.model");
+const Buses = require("../models/buses.model");
 
 // const status = ["ordered", "dispatched", "shipped", "delivered"];
-// router.post("/order/add", checkToken, (req, res, next) => {
-//   dataController.create(req, res, next, Orders);
-// });
-// router.patch("/order/update/:id", checkToken, (req, res, next) =>
-//   dataController.update(req, res, next, Orders)
-// );
-// router.get("/order/all", checkToken, (req, res, next) =>
-//   dataController.index(req, res, next, Orders, { path: "user" })
-// );
-// router.get("/order/get/:id", checkToken, (req, res, next) =>
-//   dataController.show(req, res, next, Orders, { path: "user" })
-// );
-// router.get("/order/getUserOrder/:userid", checkToken, (req, res, next) =>
-//   funcController.fetchOrdersByUser(req, res, next, Orders, { path: "user" })
-// );
-// router.delete("/order/delete/:id", checkToken, (req, res, next) =>
-//   dataController.destroy(req, res, next, Orders)
-// );
+router.post("/school/add", checkToken, (req, res, next) => {
+  dataController.create(req, res, next, Schools);
+});
+router.patch("/school/update/:id", checkToken, (req, res, next) =>
+  dataController.update(req, res, next, Schools)
+);
+router.get("/school/all", checkToken, (req, res, next) =>
+  dataController.index(req, res, next, Schools, { path: "" })
+);
+router.get("/school/get/:id", checkToken, (req, res, next) =>
+  dataController.show(req, res, next, Schools, { path: "" })
+);
+router.get(
+  "/school/getSchoolWithBuses/:schoolId",
+  checkToken,
+  (req, res, next) =>
+    funcController.getSchoolWithBuses(req, res, next, Schools, { path: "" })
+);
+router.delete("/school/delete/:id", checkToken, (req, res, next) =>
+  dataController.destroy(req, res, next, Schools)
+);
 
-// // settings
-// router.post("/setting/add", checkToken, (req, res, next) => {
-//   dataController.create(req, res, next, Setting);
-// });
-// router.patch("/setting/update/:id", checkToken, (req, res, next) =>
-//   dataController.update(req, res, next, Setting)
-// );
-
-// router.get("/setting/all", checkToken, (req, res, next) =>
-//   dataController.index(req, res, next, Setting, { path: null })
-// );
-
-// router.delete("/setting/delete/:id", checkToken, (req, res, next) =>
-//   dataController.destroy(req, res, next, Setting)
-// );
-
-// // testimonaials
-// router.post("/testimonial/add", checkToken, (req, res, next) => {
-//   dataController.create(req, res, next, Testimonials);
-// });
-// router.get("/testimonial/all", checkToken, (req, res, next) => {
-//   dataController.index(req, res, next, Testimonials, { path: "" });
-// });
-// router.get("/testimonial/:id", checkToken, (req, res, next) => {
-//   dataController.show(req, res, next, Testimonials);
-// });
-// router.patch("/testimonial/update/:id", checkToken, (req, res, next) => {
-//   dataController.update(req, res, next, Testimonials);
-// });
-// router.delete("/testimonial/delete/:id", checkToken, (req, res, next) => {
-//   dataController.destroy(req, res, next, Testimonials);
-// });
+// Buses
+router.post("/bus/add", checkToken, (req, res, next) => {
+  dataController.create(req, res, next, Buses);
+});
+router.get("/school/getbyschoolid/:schoolid", checkToken, (req, res, next) =>
+  dataController.show(req, res, next, Buses, { path: "" })
+);
 
 module.exports = router;

@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const UserRoleEnum = Object.freeze({
+  ADMIN: 1,
+  MODERATOR: 2,
+  USER: 3,
+});
 const userSchema = new Schema(
   {
     username: {
@@ -35,7 +39,8 @@ const userSchema = new Schema(
     }),
     role: {
       type: Number,
-      default: "",
+      require: true,
+      default: UserRoleEnum.USER,
     },
     status: {
       type: Number,

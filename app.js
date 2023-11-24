@@ -52,10 +52,9 @@ app.use(express.urlencoded({ extended: true, limit: "150mb" }));
 
 // welcome api on '/' route
 app.get("/", (req, res, next) => {
-  console.log(":::: get requests ::::", req.body, req.query, req.params);
   res.status(200).json({
     message: ".....server is running",
-    credit: "powered by -Ambee",
+    credit: "powered by -gps",
   });
 });
 app.post("/", (req, res, next) => {
@@ -90,5 +89,5 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-module.exports = app;
+const Applications = { app: app, websockets: (ws) => ws };
+module.exports = Applications;

@@ -26,14 +26,20 @@ const create = async (req, res, next, model) => {
     const data = await result.save();
     res.status(201).send({
       success: true,
-      _id: data._id,
-      data: data,
+      data,
       message: "Created/Added Successfully",
       responseStatus: 1,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: error, responseStatus: 0, success: false });
+    res
+      .status(500)
+      .send({
+        message: "Data already exists",
+        error: error,
+        responseStatus: 0,
+        success: false,
+      });
   }
 };
 

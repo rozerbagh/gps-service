@@ -1,38 +1,16 @@
-const port = process.env.PORT || 3006;
+const port = process.env.PORT || 8800;
 const http = require("http");
-const app = require("./app");
-const { Server } = require("socket.io");
+const { websocketConnection } = require("./socket_server");
+const { app, websockets } = require("./app");
+const SOCKET_SERVER_PORT = 3005; // Set the port you want to listen on.
+const HTTP_SERVER_PORT = 3006;
 
-console.log("server is running on port : " + port);
-const server = http.createServer(app);
-const io = new Server(server, {
-  // options
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-  },
+const httpserver = http.createServer(app);
+const socketserver = websocketConnection(httpserver);
+websockets(socketserver);
+httpserver.listen(HTTP_SERVER_PORT, () => {
+  console.log("server is running on port : " + HTTP_SERVER_PORT);
 });
-io.on("connection", (socket) => {
-  // ...
-  console.log(":::: wss has been connected ::::", socket);
-  io.sockets.emit("hi", "everyone");
-  io.sockets.emit("data", (data) => {
-    console.log(data);
-  });
-  io.sockets.emit("message", (data) => {
-    console.log(data);
-  });
-  io.sockets.emit("pool", (data) => {
-    console.log(data);
-  });
-  io.sockets.emit("Pool", (data) => {
-    console.log(data);
-  });
+socketserver.net.listen(SOCKET_SERVER_PORT, () => {
+  console.log(`GPS socket server is listening on port ${SOCKET_SERVER_PORT}`);
 });
-io.on("new_namespace", (namespace) => {
-  console.log(namespace.name);
-});
-
-// server.listen(port);
-
-io.listen(8800);

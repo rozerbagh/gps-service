@@ -1,5 +1,6 @@
 // var jwt = require("jsonwebtoken");
 var common = require("../config/common");
+const userModel = require("../models/user.model");
 var User = require("../models/user.model");
 
 //userlogin
@@ -205,6 +206,43 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const OTP = common.generateOtp();
+    await common.sendEmail(
+      {
+        from: "rozerbagh@gmail.com",
+        to: email,
+        subject: "OTP for password reset",
+        text: `The OTP for resetting your password is ${OTP}`,
+      },
+      OTP
+    );
+    // const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_APIKEY}&route=otp&variables_values=${OTP}&flash=1&numbers=${phoneNumber}`;
+    // const otpResponse = await fetch(url);
+    const user = await userModel.updateOne(
+      { email: email },
+      {
+        otp: OTP,
+      }
+    );
+    res.status(200).send({
+      status: "success",
+      statuscode: 200,
+      message: "otp send successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: "success",
+      statuscode: "500",
+      error: error,
+      message: "unable to set otp",
+    });
+  }
+};
+
 module.exports = {
   userLogin,
   getallUser,
@@ -212,4 +250,5 @@ module.exports = {
   updateUserDetails,
   getUserDetails,
   addUser,
+  sendOtp,
 };

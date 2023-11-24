@@ -4,8 +4,9 @@
   "description": "this is a beckend service for sending data from device to db",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon gps.js",
-    "server": "node gps.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "server": "node server.js"
   },
   "author": "Devil1165",
   "license": "ISC",
@@ -14,12 +15,14 @@
     "body-parser": "^1.18.3",
     "dotenv": "^16.3.1",
     "express": "^4.16.4",
+    "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^5.3.9",
-    "net": "^1.0.2",
     "node-gpsd": "^0.3.4",
+    "nodemailer": "^6.9.7",
     "nodemon": "^2.0.22",
     "serialport": "^12.0.0",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.7.2",
+    "ws": "^8.14.2"
   }
 }

@@ -3,6 +3,8 @@ var bcrypt = require("bcryptjs");
 // var db = require('../config/db').db3;
 var _conf = require("./general");
 var User = require("../models/user.model");
+const nodemailer = require("nodemailer");
+const { createTransport } = nodemailer;
 
 const expiringTime = new Date().getTime() + 60 * 24 * 60 * 60 * 1000;
 async function generateToken(data) {
@@ -87,8 +89,40 @@ async function passwordComparing(password, hashPassword) {
   var isMatch = await bcrypt.compare(password, hashPassword);
   return isMatch;
 }
+function generateOtp() {
+  var digits = "0123456789";
+  let OTP = "";
+  for (let i = 0; i < 6; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+  console.log(OTP);
+  return OTP;
+}
+
+async function sendEmail(mailbody) {
+  return new Promise((resolve, reject) => {
+    const transport = createTransport({
+      service: "gmail",
+      auth: {
+        user: "rozerbagh@gmail.com",
+        pass: "unbwktwpilhvanyo",
+      },
+    });
+
+    transport.sendMail(mailbody, (error, response) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(response.messageId);
+      }
+      transport.close();
+    });
+  });
+}
 module.exports = {
   generateToken,
   passwordHashing,
   passwordComparing,
+  generateOtp,
+  sendEmail,
 };
