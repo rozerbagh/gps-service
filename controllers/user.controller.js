@@ -1,12 +1,9 @@
-// var jwt = require("jsonwebtoken");
-var common = require("../config/common");
+const common = require("../config/common");
 const userModel = require("../models/user.model");
-var User = require("../models/user.model");
-
+const User = require("../models/user.model");
+const createError = require("http-errors");
 //userlogin
 const userLogin = async (req, res) => {
-  // console.log(req.body);
-
   try {
     const user = await User.findOne({ email: req.body.email });
     console.log(user);
@@ -19,26 +16,24 @@ const userLogin = async (req, res) => {
         id: user._id.toString(),
         email: user.email,
       });
-      console.log(token);
-      res.status(200).send({
-        status: true,
+      const succesmsg = "Login successfully";
+      const userData = {
         userId: user._id,
         email: user.email,
         userName: user.fullname,
         phoneno: user.phoneno,
         role: user.role,
-        statuscode: 200,
-        message: "Login successfully",
         token: token,
         expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
-      });
+      };
+      res.successResponse(userData, succesmsg, 200);
     } else {
-      res.status(401).send({
-        message: "password didn't match",
-      });
+      const er = createError(401, "password didn't match");
+      res.errorResponse(er, "password didn't match", 401);
     }
   } catch (error) {
-    res.status(400).send({ error: error, message: "User not Found" });
+    const er = createError(404, "User not found");
+    res.errorResponse(er, "User not found", 404);
   }
 };
 
@@ -48,11 +43,8 @@ const addUser = async (req, res, next) => {
     const exitingUser = await User.find({ email: req.body.email });
 
     if (exitingUser.length > 0) {
-      res.status(503).send({
-        message: "unable to signup, email already exit",
-        statuscode: 503,
-        success: false,
-      });
+      const er = createError(500, "Nnable to signup, email already exit");
+      res.errorResponse(er, "User not found", 500);
       return;
     }
     const {
@@ -83,10 +75,7 @@ const addUser = async (req, res, next) => {
       id: data._id.toString(),
       email: data.email,
     });
-    res.status(200).send({
-      success: true,
-      statuscode: 200,
-      message: email + "has been registered successfully",
+    const userData = {
       userId: user._id,
       email: user.email,
       userName: user.fullname,
@@ -94,12 +83,14 @@ const addUser = async (req, res, next) => {
       role: user.role,
       token: token,
       expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
-    });
+    };
+    res.successResponse(
+      userData,
+      email + "has been registered successfully",
+      200
+    );
   } catch (error) {
-    console.log(error);
-    res
-      .status(501)
-      .send({ message: "Unable to signup", statuscode: 500, success: false });
+    res.errorResponse(error, "Unable to signup! Internal server error", 500);
   }
 };
 //getallusers
@@ -108,22 +99,14 @@ const getallUser = async (req, res) => {
   try {
     const users = await User.find({});
     if (admin === 1) {
+      // res.successResponse(users, "Lists of all users", 200);
       res.status(200).send(users);
     } else {
-      res.status(200).send({
-        status: "success",
-        statuscode: 200,
-        message: "get all users",
-        data: users,
-      });
+      res.successResponse({ admin: false }, "Lists of all users", 200);
     }
   } catch (error) {
-    res.status(500).send({
-      status: "failed",
-      statuscode: "500",
-      error: error,
-      message: "unable to get users",
-    });
+    const er = createError(501, "Unable to get users");
+    res.errorResponse(er, "Unable to get users", 501);
   }
 };
 
@@ -134,75 +117,38 @@ const getUserDetails = async (req, res) => {
     if (admin === 1) {
       res.status(200).send(user);
     } else {
-      res.status(200).send({
-        status: "success",
-        statuscode: 200,
-        message: "get user details",
-        data: [user],
-      });
+      res.successResponse([users], "User details", 200);
     }
   } catch (error) {
-    res.status(500).send({
-      status: "failed",
-      statuscode: "500",
-      error: error,
-      message: "unable to get user details",
-    });
+    const er = createError(501, "Unable to get user details");
+    res.errorResponse(er, "Unable to get user details", 501);
   }
 };
 
 const updateUserDetails = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body);
+    await User.findByIdAndUpdate(req.params.id, req.body);
     const getuser = await User.findById({ _id: req.params.id });
-    if (!getuser)
-      return res.status(400).send({
-        status: "failed",
-        statuscode: 400,
-        message: "unable to updated",
-      });
-
-    return res.status(200).send({
-      status: "susccess",
-      statuscode: 200,
-      message: "user updated",
-      data: [getuser],
-    });
+    if (!getuser) {
+      const er = createError(500, "Unable update");
+      res.errorResponse(er, "Unable update", 500);
+      return;
+    }
+    res.successResponse([getuser], "Your details has been updated", 200);
   } catch (error) {
-    return res.status(500).send({
-      status: "failed",
-      statuscode: 500,
-      message: "unable to updated",
-      error: error,
-    });
+    const er = createError(500, "Unable update");
+    res.errorResponse(er, "Unable update", 500);
   }
 };
 
 const deleteUser = async (req, res, next) => {
   try {
-    const admin = parseInt(req.query.admin);
     const user = await User.findByIdAndDelete({ _id: req.params.id });
-    if (admin === 1) {
-      res.status(200).send({
-        status: "success",
-        statuscode: 200,
-        message: "deleted succesfully",
-        data: user,
-      });
-    } else {
-      res.status(200).send({
-        status: "success",
-        statuscode: 200,
-        message: "deleted succesfully",
-      });
-    }
+    res.successResponse(user, "Your details has been updated", 200);
   } catch (error) {
-    res.status(500).send({
-      status: "success",
-      statuscode: "500",
-      error: error,
-      message: "unable to delete users",
-    });
+    const er = createError(500, "Unable Delete");
+    res.errorResponse(er, "Unable Delete", 500);
+    return;
   }
 };
 
@@ -221,25 +167,16 @@ const sendOtp = async (req, res) => {
     );
     // const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_APIKEY}&route=otp&variables_values=${OTP}&flash=1&numbers=${phoneNumber}`;
     // const otpResponse = await fetch(url);
-    const user = await userModel.updateOne(
+    await userModel.updateOne(
       { email: email },
       {
         otp: OTP,
       }
     );
-    res.status(200).send({
-      status: "success",
-      statuscode: 200,
-      message: "otp send successfully",
-    });
+    res.successResponse({}, "OTP has been send succesfully to your email", 200);
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      status: "success",
-      statuscode: "500",
-      error: error,
-      message: "unable to set otp",
-    });
+    res.errorResponse(error, "Unable to send OTP", 500);
+    return;
   }
 };
 

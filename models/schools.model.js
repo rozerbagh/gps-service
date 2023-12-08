@@ -40,7 +40,6 @@ schoolSchema.methods.getSchoolWithBuses = async function () {
   try {
     const schoolId = this._id; // Assuming this method is called on an instance of School
     const school = await Schools.findById(schoolId);
-    console.log(schoolId, school);
     if (!school) {
       console.log("School not found");
       return null;

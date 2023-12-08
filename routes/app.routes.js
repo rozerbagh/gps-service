@@ -37,4 +37,6 @@ router.get("/school/getbyschoolid/:schoolid", checkToken, (req, res, next) =>
   dataController.show(req, res, next, Buses, { path: "" })
 );
 
+router.post("/push/notification", (req, res, next) => {});
+
 module.exports = router;

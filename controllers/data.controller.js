@@ -10,13 +10,13 @@ const index = async (req, res, next, model, attr) => {
     const count = await model.count({});
 
     if (!count) {
-      res.status(404).send({ message: "Data Not Found", responseStatus: 0 });
+      const er = createError(404, "Data Not Found");
+      res.errorResponse(er, "Data Not Found", 404);
     } else {
-      res.status(200).send({ data: data, count: count, responseStatus: 1 });
+      res.successResponse({ ...data }, "Your details has been updated", 200);
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send({ message: error, responseStatus: 0 });
+    res.errorResponse(error, "Internal Server Error!", 500);
   }
 };
 
@@ -24,28 +24,17 @@ const create = async (req, res, next, model) => {
   try {
     const result = new model({ ...req.body });
     const data = await result.save();
-    res.status(201).send({
-      success: true,
-      data,
-      message: "Created/Added Successfully",
-      responseStatus: 1,
-    });
+    res.successResponse({ ...data }, "Created/Added Successfully", 200);
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .send({
-        message: "Data already exists",
-        error: error,
-        responseStatus: 0,
-        success: false,
-      });
+    res.errorResponse(error, "Data may exists, Internal Server Error!", 500);
   }
 };
 
 const bulkCreate = async (req, res, next, model) => {
   try {
     const data = await model.insertMany(req.data);
+    res.successResponse({ ...data }, "Bulk Data Added Successfully", 200);
+
     res.status(201).send({
       success: true,
       message: "Bulk Data Added Successfully",
@@ -53,7 +42,7 @@ const bulkCreate = async (req, res, next, model) => {
       data: data,
     });
   } catch (error) {
-    res.status(500).send({ message: error, responseStatus: 0 });
+    res.errorResponse(error, "Internal Server Error!", 500);
   }
 };
 
@@ -65,15 +54,16 @@ const show = async (req, res, next, model, attr) => {
     } else {
       data = await model.findById(req.params.id);
     }
+
     if (!data) {
-      res
-        .status(404)
-        .send({ response: { message: "Data Not Found", responseStatus: 0 } });
+      const er = createError(404, "Data not found");
+      res.errorResponse(er, "Data not found", 404);
+      return;
     } else {
-      res.status(200).send({ data: data, responseStatus: 1 });
+      res.successResponse(data, "Fetched Succesfull", 200);
     }
   } catch (error) {
-    res.status(500).send({ message: error, responseStatus: 0 });
+    res.errorResponse(error, "Unable to Fetch", 500);
   }
 };
 
@@ -81,16 +71,14 @@ const update = async (req, res, next, model) => {
   try {
     const data = await model.findByIdAndUpdate(req.params.id, req.body);
     if (!data) {
-      res.status(404).send({ message: "Data Not Found", responseStatus: 0 });
+      const er = createError(404, "Data not found");
+      res.errorResponse(er, "Data not found", 404);
+      return;
     } else {
-      res.status(202).send({
-        success: true,
-        message: "Updated successfully",
-        responseStatus: 1,
-      });
+      res.successResponse(data, "Updated successfully", 200);
     }
   } catch (error) {
-    res.status(500).send({ message: error, responseStatus: 0 });
+    res.errorResponse(error, "Unable to update", 500);
   }
 };
 
@@ -98,19 +86,13 @@ const destroy = async (req, res, next, model) => {
   try {
     const data = await model.findByIdAndDelete(req.params.id);
     if (!data) {
-      res.status(404).send({
-        message: "Data Not Found for deletion",
-        responseStatus: 0,
-      });
+      const er = createError(404, "Data not found");
+      res.errorResponse(er, "Data not found", 404);
     } else {
-      res.status(202).send({
-        success: true,
-        message: "deleted successfully",
-        responseStatus: 1,
-      });
+      res.successResponse(data, "Your details has been updated", 200);
     }
   } catch (error) {
-    res.status(500).send({ message: error, responseStatus: 0 });
+    res.errorResponse(error, "Unable Delete", 500);
   }
 };
 

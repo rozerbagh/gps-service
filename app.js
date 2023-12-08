@@ -9,7 +9,10 @@ const Data = require("./models/dataModel");
 const dataRouter = require("./routes/dataRoute");
 const userRoutes = require("./routes/user.routes");
 const appsRoutes = require("./routes/app.routes");
-
+const {
+  successResponse,
+  errorResponse,
+} = require("./middlewares/commonResponse");
 var corsOptions = {
   origin: "*",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -35,6 +38,12 @@ mongoose
     console.log(err);
   });
 
+// Middleware for default success response structure
+app.use(successResponse);
+
+// Middleware for default error response structure
+app.use(errorResponse);
+
 // setting up the cors
 app.use(cors(corsOptions));
 
@@ -46,6 +55,14 @@ app.use(bodyParser.json());
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/app", appsRoutes);
+app.post("/sms/inbound", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
+app.post("/sms/status", (req, res) => {
+  console.log(req.body);
+  res.send(req.body);
+});
 app.use(express.static("public"));
 app.use(express.json({ limit: "150mb" }));
 app.use(express.urlencoded({ extended: true, limit: "150mb" }));

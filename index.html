@@ -53,12 +53,12 @@
       const speed = fields[8];
       const date = fields[3];
       const time = fields[9];
-      // console.log(
-      //   identifier,
-      //   "Got GPS tracker data.",
-      //   new Date().getTime(),
-      //   gpsData.split(",")
-      // );
+      console.log(
+        identifier,
+        "Got GPS tracker data.",
+        new Date().getTime(),
+        gpsData.split(",")
+      );
     });
     document.getElementById("msgbtn").addEventListener("click", (e) => {
       const ws = new WebSocket("ws://143.244.128.159:3006");
