@@ -61,7 +61,7 @@
       );
     });
     document.getElementById("msgbtn").addEventListener("click", (e) => {
-      const ws = new WebSocket("ws://143.244.128.159:3006");
+      const ws = new WebSocket("ws://143.244.128.159:3005");
 
       ws.addEventListener("open", () => {
         console.log("WebSocket connection opened.");
@@ -71,9 +71,32 @@
       });
 
       ws.addEventListener("message", (event) => {
-        console.log("Received message from server:", event.data);
+        console.log("Received message from server:", event.data.Blob);
+        event.data
+          .arrayBuffer()
+          .then((buffer) => {
+            console.log(buffer);
+            // 'buffer' now contains the data from the Blob as an ArrayBuffer
+
+            // You can work with the ArrayBuffer here, for example:
+            // Create a Uint8Array to manipulate the binary data
+            let uint8View = new Uint8Array(buffer);
+
+            // Accessing the bytes in the buffer
+            for (let i = 0; i < uint8View.length; i++) {
+              console.log(uint8View[i]);
+              // Perform operations with the binary data as needed
+            }
+          })
+          .catch((error) => {
+            console.error(
+              "Error occurred while converting Blob to ArrayBuffer:",
+              error
+            );
+          });
         // Handle the message received from the server
       });
+      ws.send("Rozer bagh");
     });
   </script>
 </html>

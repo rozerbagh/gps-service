@@ -11,7 +11,7 @@ async function getSchoolWithBuses(req, res) {
     }
     const schoolsBuses = await result.getSchoolWithBuses();
     res.successResponse(
-      { ...schoolsBuses._doc, buses: schoolsBuses.buses },
+      [{ ...schoolsBuses._doc, buses: schoolsBuses.buses }],
       "List of buses for the selected Schools",
       200
     );
