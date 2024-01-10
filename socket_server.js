@@ -35,6 +35,32 @@ const gpsDataFunc = (gpsData, wss) => {
   }
 };
 
+function dataToBasicBufer(params) {
+  const buf = Buffer.from(params);
+
+  // Encode the Buffer to Base64
+  const base64Data = buf.toString("base64");
+
+  // Create a JSON object with the Base64-encoded data
+  const json = { data: base64Data };
+
+  // Convert the JSON object to a string
+  const jsonString = JSON.stringify(json);
+
+  console.log("===== dataToBasicBufer =====", jsonString);
+  //output {"data":"AQID"}
+}
+
+function utf8Decode(buffer) {
+  const decoder = new TextDecoder("utf-8");
+  console.log("===utf8Decode===", decoder, decoder.decode(buffer));
+  return decoder.decode(buffer);
+}
+function asciiDecode(uint8Array) {
+  const decoedr = String.fromCharCode.apply(null, uint8Array);
+  console.log("====asciiDecode ====", decoedr);
+}
+
 // Create a WebSocket server attached to the HTTP server
 function websocketConnection(httpserver) {
   const wss = new WebSocket.Server({ server: httpserver });
@@ -63,6 +89,9 @@ function websocketConnection(httpserver) {
     // Listen for data from the GPS tracker.
     _socket.on("data", (data) => {
       console.log("gps daat =============== ", data);
+      dataToBasicBufer(data);
+      utf8Decode(data);
+      asciiDecode(data);
       const gpsData = data.toString("utf8"); // Convert the binary data to a string.
       console.log("Got GPS tracker data.", new Date().getTime(), gpsData);
       const res = gpsDataFunc(gpsData, wss);
