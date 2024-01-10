@@ -47,7 +47,7 @@ function dataToBasicBufer(params) {
   // Convert the JSON object to a string
   const jsonString = JSON.stringify(json);
 
-  console.log("===== dataToBasicBufer =====", jsonString);
+  console.log("===== dataToBasicBufer =====", buf, jsonString);
   //output {"data":"AQID"}
 }
 
