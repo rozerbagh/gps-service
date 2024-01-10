@@ -62,6 +62,7 @@ function websocketConnection(httpserver) {
 
     // Listen for data from the GPS tracker.
     _socket.on("data", (data) => {
+      console.log("gps daat =============== ", data);
       const gpsData = data.toString("utf8"); // Convert the binary data to a string.
       console.log("Got GPS tracker data.", new Date().getTime(), gpsData);
       const res = gpsDataFunc(gpsData, wss);
