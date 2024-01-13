@@ -1,6 +1,6 @@
 const net = require("net");
 const WebSocket = require("ws");
-const gpsDataFunc = (gpsData, wss) => {
+const gpsDataFunc = (gpsData) => {
   try {
     // Split the data by commas
     const fields = gpsData.split(",");
@@ -22,10 +22,17 @@ const gpsDataFunc = (gpsData, wss) => {
     console.log(`Time: ${time}`);
     console.log(`===========================`);
 
-    return {
-      data: { identifier, latitude, longitude, speed, date, time, fields },
-      error: null,
-    };
+    if (identifier === undefined || identifier === null) {
+      return {
+        data: null,
+        error: new Error(undefined),
+      };
+    } else {
+      return {
+        data: { identifier, latitude, longitude, speed, date, time, fields },
+        error: null,
+      };
+    }
   } catch (error) {
     console.log(error);
     return {
@@ -69,8 +76,13 @@ function websocketConnection(httpserver) {
   wss.on("connection", (ws) => {
     console.log("WebSocket client connected.");
 
+    ws.on("open", (e) => {
+      ws.send("server websocketr is ready to send message");
+    });
+
     ws.on("message", (message) => {
       console.log(`Received message from client: ${message}`);
+      ws.send("recieved message and sending from server");
       // Process the message received from the WebSocket client
       // You can broadcast this message to all connected WebSocket clients if needed
     });
@@ -83,6 +95,7 @@ function websocketConnection(httpserver) {
       console.error("WebSocket error:", err);
     });
   });
+
   const socketserver = net.createServer((_socket) => {
     console.log("GPS tracker connected.");
 
@@ -93,17 +106,17 @@ function websocketConnection(httpserver) {
       utf8Decode(data);
       asciiDecode(data);
       const gpsData = data.toString("utf8"); // Convert the binary data to a string.
-      console.log("Got GPS tracker data.", new Date().getTime(), gpsData);
-      const res = gpsDataFunc(gpsData, wss);
-      console.log(res.data, res.error);
+      const res = gpsDataFunc(gpsData);
       // Process the data received from the TCP client
 
-      // Forward data to WebSocket clients
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(data);
-        }
-      });
+      if (res.data !== null) {
+        // Forward data to WebSocket clients
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(res.data);
+          }
+        });
+      }
     });
 
     // Handle socket close or errors.

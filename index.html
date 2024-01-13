@@ -31,7 +31,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const ws = new WebSocket("ws://143.244.128.159:3006");
+    const ws = new WebSocket("ws://localhost:3006");
 
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened.");
@@ -43,60 +43,6 @@
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       console.log("Received message from server:", event.data);
-      const gpsData = event.data.toString("utf8"); // Convert the binary data to a string.
-      const fields = gpsData.split(",");
-
-      // Extract relevant fields
-      const identifier = fields[1];
-      const latitude = fields[5];
-      const longitude = fields[7];
-      const speed = fields[8];
-      const date = fields[3];
-      const time = fields[9];
-      console.log(
-        identifier,
-        "Got GPS tracker data.",
-        new Date().getTime(),
-        gpsData.split(",")
-      );
-    });
-    document.getElementById("msgbtn").addEventListener("click", (e) => {
-      const ws = new WebSocket("ws://143.244.128.159:3005");
-
-      ws.addEventListener("open", () => {
-        console.log("WebSocket connection opened.");
-
-        // Send a message to the server
-        ws.send("Hello, server! This is the browser.");
-      });
-
-      ws.addEventListener("message", (event) => {
-        console.log("Received message from server:", event.data.Blob);
-        event.data
-          .arrayBuffer()
-          .then((buffer) => {
-            console.log(buffer);
-            // 'buffer' now contains the data from the Blob as an ArrayBuffer
-
-            // You can work with the ArrayBuffer here, for example:
-            // Create a Uint8Array to manipulate the binary data
-            let uint8View = new Uint8Array(buffer);
-
-            // Accessing the bytes in the buffer
-            for (let i = 0; i < uint8View.length; i++) {
-              console.log(uint8View[i]);
-              // Perform operations with the binary data as needed
-            }
-          })
-          .catch((error) => {
-            console.error(
-              "Error occurred while converting Blob to ArrayBuffer:",
-              error
-            );
-          });
-        // Handle the message received from the server
-      });
-      ws.send("Rozer bagh");
     });
   </script>
 </html>
