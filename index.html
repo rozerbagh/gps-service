@@ -31,7 +31,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const ws = new WebSocket("ws://localhost:3006");
+    const ws = new WebSocket("ws://143.244.128.159:3006");
 
     ws.addEventListener("open", () => {
       console.log("WebSocket connection opened.");
@@ -42,7 +42,7 @@
 
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
-      console.log("Received message from server:", event.data);
+      console.log("Received message from server:", event);
     });
   </script>
 </html>

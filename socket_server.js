@@ -29,7 +29,15 @@ const gpsDataFunc = (gpsData) => {
       };
     } else {
       return {
-        data: { identifier, latitude, longitude, speed, date, time, fields },
+        data: JSON.stringify({
+          identifier,
+          latitude,
+          longitude,
+          speed,
+          date,
+          time,
+          fields,
+        }),
         error: null,
       };
     }
