@@ -163,12 +163,13 @@ function websocketConnection(httpserver) {
 
     // Listen for data from the GPS tracker.
     _socket.on("data", (data) => {
-      console.log("gps daat =============== ", data);
-      dataToBasicBufer(data);
-      utf8Decode(data);
-      asciiDecode(data);
+      // console.log("gps daat =============== ", data);
+      // dataToBasicBufer(data);
+      // utf8Decode(data);
+      // asciiDecode(data);
       const gpsData = data.toString("utf8"); // Convert the binary data to a string.
       const res = gpsDataFunc(gpsData);
+      console.log(res);
       // Process the data received from the TCP client
 
       if (res.data !== null) {
