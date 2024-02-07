@@ -59,7 +59,7 @@ const gpsDataFunc = (gpsData) => {
         data: JSON.stringify({
           identifier,
           latitude: (parseFloat(latitude) / 100).toString(),
-          longitude: (parseFloat(longitude) / 1000).toString(),
+          longitude: (parseFloat(longitude) / 100).toString(),
           speed,
           date,
           time,
