@@ -26,8 +26,8 @@ const gpsDataFunc = (gpsData) => {
       return {
         data: JSON.stringify({
           identifier: "9172159029",
-          latitude: "1246.9173",
-          longitude: "07739.5024",
+          latitude: (1246.9173 / 100).toString(),
+          longitude: (7739.5024 / 100).toString(),
           speed: "E",
           date: "063343",
           time: "000.00",
@@ -58,8 +58,8 @@ const gpsDataFunc = (gpsData) => {
       return {
         data: JSON.stringify({
           identifier,
-          latitude,
-          longitude,
+          latitude: (parseFloat(latitude) / 100).toString(),
+          longitude: (parseFloat(longitude) / 1000).toString(),
           speed,
           date,
           time,
@@ -73,8 +73,8 @@ const gpsDataFunc = (gpsData) => {
     return {
       data: JSON.stringify({
         identifier: "9172159029",
-        latitude: "1246.9173",
-        longitude: "07739.5024",
+        latitude: (1246.9173 / 100).toString(),
+        longitude: (7739.5024 / 100).toString(),
         speed: "E",
         date: "063343",
         time: "000.00",
