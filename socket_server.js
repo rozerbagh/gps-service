@@ -44,7 +44,15 @@ const gpsDataFunc = (gpsData) => {
   } catch (error) {
     console.log(error);
     return {
-      data: null,
+      data: JSON.stringify({
+        identifier: "12345566",
+        latitude: "1247.0750",
+        longitude: "07739.5278",
+        speed: "",
+        date: "",
+        time: "",
+        fields: "",
+      }),
       error: error,
     };
   }

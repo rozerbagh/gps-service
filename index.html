@@ -43,6 +43,7 @@
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       console.log("Received message from server:", event);
+      console.log(JSON.parse(event.data), " At ", new Date().getTime());
     });
   </script>
 </html>
