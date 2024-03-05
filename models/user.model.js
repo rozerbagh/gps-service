@@ -54,6 +54,10 @@ const userSchema = new Schema(
       type: Number,
       default: "",
     },
+    subscribed: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

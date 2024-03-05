@@ -5,8 +5,6 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 var cors = require("cors");
 
-const Data = require("./models/dataModel");
-const dataRouter = require("./routes/dataRoute");
 const userRoutes = require("./routes/user.routes");
 const appsRoutes = require("./routes/app.routes");
 const {
@@ -90,7 +88,6 @@ app.post("/gps", (req, res) => {
   // Process the GPS data as needed
   res.sendStatus(200); // Send a response to the tracker
 });
-app.use("/api/v1/data", dataRouter);
 
 // cors handling
 app.use((req, res, next) => {
