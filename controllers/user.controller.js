@@ -97,7 +97,8 @@ const addUser = async (req, res, next) => {
 const getallUser = async (req, res) => {
   const admin = parseInt(req.query.admin);
   try {
-    const users = await User.find({});
+    const users = await User.find({}).select("-password");
+
     if (admin === 1) {
       // res.successResponse(users, "Lists of all users", 200);
       res.status(200).send(users);
