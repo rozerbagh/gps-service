@@ -23,6 +23,8 @@ const userLogin = async (req, res) => {
         userName: user.fullname,
         phoneno: user.phoneno,
         role: user.role,
+        subscribed: user.subscribed,
+        gps_id: user.gps_id,
         token: token,
         expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
       };

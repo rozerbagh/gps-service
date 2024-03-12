@@ -58,6 +58,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    gps_id: {
+      type: String,
+      default: "9172159029",
+    },
   },
   { timestamps: true }
 );
