@@ -31,19 +31,36 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const ws = new WebSocket("ws://143.244.128.159:3006");
+    const ws = new WebSocket("ws://localhost:3006");
 
-    ws.addEventListener("open", () => {
-      console.log("WebSocket connection opened.");
-
+    ws.addEventListener("open", (event) => {
+      console.log("WebSocket connection opened.", event);
       // Send a message to the server
-      ws.send("Hello, server! This is the browser.");
+      // ws.send("Hello, server! This is the browser.");
     });
 
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
-      console.log("Received message from server:", event);
-      console.log(JSON.parse(event.data), " At ", new Date().getTime());
+      const data = JSON.parse(event.data);
+      if (data.type === "SERVER_COORDS_MESSAGE") {
+        console.log("Server coords event response:", data.payload);
+      }
+    });
+    const sendbutton = document.getElementById("sendButton");
+    sendbutton.addEventListener("click", (e) => {
+      const message = document.getElementById("messageInput").value;
+      const sendMsgData = {
+        type: "SEND_COORDS",
+        payload: {
+          role: "3",
+          coordinate_type: "phone",
+          phoneno: "driverphoneno",
+          gps_id: "",
+          coords: { lat: "", long: "" },
+          message: message,
+        },
+      };
+      ws.send(JSON.stringify(sendMsgData));
     });
   </script>
 </html>

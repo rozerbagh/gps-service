@@ -6,7 +6,7 @@ const addressSchema = new Schema({
   landmark: { type: String },
   district: { type: String, require: true },
   state: { type: String, require: true },
-  pincode: { type: Number, require: true, unique: true },
+  pincode: { type: Number, require: true },
   country: { type: String, require: true },
   // Other address fields
 });
@@ -27,7 +27,6 @@ const schoolSchema = new Schema({
       pincode: 0,
       country: "INDIA",
     },
-    unique: true,
   },
   status: {
     type: Number,

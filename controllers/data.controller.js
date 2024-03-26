@@ -24,8 +24,10 @@ const create = async (req, res, next, model) => {
   try {
     const result = new model({ ...req.body });
     const data = await result.save();
-    res.successResponse([...data], "Created/Added Successfully", 200);
+    console.log(data);
+    res.successResponse({ data: data }, "Created/Added Successfully", 200);
   } catch (error) {
+    console.log(error);
     res.errorResponse(error, "Data may exists, Internal Server Error!", 500);
   }
 };

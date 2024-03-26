@@ -130,6 +130,20 @@ function asciiDecode(uint8Array) {
   console.log("====asciiDecode ====", decoedr);
 }
 
+// Function to handle custom event
+function handleCustomEvent(payload, websocket) {
+  // Process payload
+  console.log("Custom event received:", payload);
+
+  // Send response back to client if needed
+  websocket.send(
+    JSON.stringify({
+      type: "SERVER_COORDS_MESSAGE",
+      payload: payload,
+    })
+  );
+}
+
 // Create a WebSocket server attached to the HTTP server
 function websocketConnection(httpserver) {
   const wss = new WebSocket.Server({ server: httpserver });
@@ -144,9 +158,15 @@ function websocketConnection(httpserver) {
 
     ws.on("message", (message) => {
       console.log(`Received message from client: ${message}`);
-      ws.send("recieved message and sending from server");
       // Process the message received from the WebSocket client
       // You can broadcast this message to all connected WebSocket clients if needed
+  
+      // Check for custom events
+      const data = JSON.parse(message);
+      if (data.type === "SEND_COORDS") {
+        // Handle custom event
+        handleCustomEvent(data.payload, ws);
+      }
     });
 
     ws.on("close", () => {
