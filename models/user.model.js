@@ -4,6 +4,7 @@ const UserRoleEnum = Object.freeze({
   ADMIN: 1,
   MODERATOR: 2,
   USER: 3,
+  DRIVER: 4
 });
 const userSchema = new Schema(
   {

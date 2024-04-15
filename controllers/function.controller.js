@@ -34,6 +34,8 @@ async function sendNotification(req, res) {
     res.errorResponse(er, "Internal server error", 501);
   }
 }
+
+
 module.exports = {
   getSchoolWithBuses,
   sendNotification,

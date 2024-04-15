@@ -7,6 +7,7 @@ const busesSchema = new mongoose.Schema({
   busname: { type: String, require: true },
   numberplate: { type: String, require: true, unique: true },
   drivername: { type: String, require: true },
+  driverphoneno: { type: String, require: true },
   capacity: { type: Number, require: true },
 });
 const Buses = mongoose.model("buses", busesSchema);
