@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const UserRoleEnum = Object.freeze({
   ADMIN: 1,
-  MODERATOR: 2,
-  USER: 3,
-  DRIVER: 4
+  USER: 2,
+  DRIVER: 3,
+  MODERATOR: 4,
 });
 const userSchema = new Schema(
   {
