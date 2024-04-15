@@ -1,11 +1,12 @@
 const common = require("../config/common");
 const userModel = require("../models/user.model");
+const busModel = require("../models/buses.model")
 const User = require("../models/user.model");
 const createError = require("http-errors");
 //userlogin
 const userLogin = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await userModel.findOne({ email: req.body.email });
     console.log(user);
     const isMatch = await common.passwordComparing(
       req.body.password,
@@ -17,6 +18,9 @@ const userLogin = async (req, res) => {
         email: user.email,
       });
       const succesmsg = "Login successfully";
+      const bus_id  =  user.busId;
+      const bus = await busModel.findById(bus_id).exec();
+      console.log(bus);
       const userData = {
         userId: user._id,
         email: user.email,
@@ -27,6 +31,7 @@ const userLogin = async (req, res) => {
         gps_id: user.gps_id,
         token: token,
         expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
+        bus:bus ? bus : null,
       };
       res.successResponse(userData, succesmsg, 200);
     } else {
@@ -50,6 +55,7 @@ const addUser = async (req, res, next) => {
       return;
     }
     const {
+      busId,
       username,
       fullname,
       email,
@@ -62,6 +68,7 @@ const addUser = async (req, res, next) => {
     } = req.body;
     const hashPassword = await common.passwordHashing(password);
     const user = new User({
+      busId: busId,
       username: username,
       fullname: fullname,
       email: email,

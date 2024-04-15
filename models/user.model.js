@@ -8,6 +8,11 @@ const UserRoleEnum = Object.freeze({
 });
 const userSchema = new Schema(
   {
+    busId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "buses",
+      required: true,
+    },
     username: {
       type: String,
     },
