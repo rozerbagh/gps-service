@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const busesSchema = new mongoose.Schema({
   schoolId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "School",
+    ref: "schools",
   },
   busname: { type: String, require: true },
   numberplate: { type: String, require: true, unique: true },
