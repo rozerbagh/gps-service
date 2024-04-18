@@ -163,11 +163,12 @@ function websocketConnection(httpserver) {
   
       // Check for custom events
       console.log("line : 100000 -- 165", message)
-      const data = JSON.parse(message);
-      if (data.type === "SEND_COORDS") {
-        // Handle custom event
-        handleCustomEvent(data.payload, ws);
-      }
+      // const data = JSON.parse(message);
+      // if (data.type === "SEND_COORDS") {
+      //   // Handle custom event
+      //   handleCustomEvent(message, ws);
+      // }
+      handleCustomEvent(message, ws);
     });
 
     ws.on("close", () => {
