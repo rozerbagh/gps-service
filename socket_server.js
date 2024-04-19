@@ -162,13 +162,11 @@ function websocketConnection(httpserver) {
       // You can broadcast this message to all connected WebSocket clients if needed
   
       // Check for custom events
-      console.log("line : 100000 -- 165", message)
-      // const data = JSON.parse(message);
-      // if (data.type === "SEND_COORDS") {
-      //   // Handle custom event
-      //   handleCustomEvent(message, ws);
-      // }
-      handleCustomEvent(message, ws);
+      const data = JSON.parse(`${message}`);
+      if (data.type === "SEND_COORDS") {
+        // Handle custom event
+        handleCustomEvent(data, ws);
+      }
     });
 
     ws.on("close", () => {
@@ -185,7 +183,7 @@ function websocketConnection(httpserver) {
 
     // Listen for data from the GPS tracker.
     _socket.on("data", (data) => {
-      // console.log("gps daat =============== ", data);
+      console.log("gps daat =============== ", data);
       // dataToBasicBufer(data);
       // utf8Decode(data);
       // asciiDecode(data);

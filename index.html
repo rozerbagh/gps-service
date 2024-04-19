@@ -23,6 +23,8 @@
         placeholder="Type a message..."
       /><br />
       <button class="btn btn-secondary" id="sendButton">Send Message</button>
+      <br /><br />
+      <button class="btn btn-primary" id="jsonDataBtn">Send JSON</button>
     </div>
   </body>
   <script
@@ -42,6 +44,7 @@
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
+      console.log(data, event)
       if (data.type === "SERVER_COORDS_MESSAGE") {
         console.log("Server coords event response:", data.payload);
       }
