@@ -165,7 +165,7 @@ function websocketConnection(httpserver) {
       const data = JSON.parse(`${message}`);
       if (data.type === "SEND_COORDS") {
         // Handle custom event
-        handleCustomEvent(data, ws);
+        handleCustomEvent(data.payload, ws);
       }
     });
 

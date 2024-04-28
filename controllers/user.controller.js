@@ -6,8 +6,9 @@ const createError = require("http-errors");
 //userlogin
 const userLogin = async (req, res) => {
   try {
+    const isAdmin = req.query.admin === "true" || req.query.admin === true;
+    const isSchool = req.query.isSchool === "true" || req.query.isSchool === true;
     const user = await userModel.findOne({ email: req.body.email });
-    console.log(user);
     const isMatch = await common.passwordComparing(
       req.body.password,
       user.password

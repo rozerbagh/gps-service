@@ -68,6 +68,15 @@ const userSchema = new Schema(
       type: String,
       default: "9172159029",
     },
+    isSchoolUser: {
+      type: Boolean,
+      default: false,
+    },
+    schoolId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "schools",
+      required: true,
+    },
   },
   { timestamps: true }
 );
