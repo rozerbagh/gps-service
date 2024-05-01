@@ -162,7 +162,13 @@ function websocketConnection(httpserver) {
       // You can broadcast this message to all connected WebSocket clients if needed
   
       // Check for custom events
-      const data = JSON.parse(`${message}`);
+      let data = {};
+      try {
+        data = JSON.parse(`${message}`);
+      } catch (err){
+        data = JSON.parse(message);
+      }
+      console.log(data)
       if (data.type === "SEND_COORDS") {
         // Handle custom event
         handleCustomEvent(data.payload, ws);
