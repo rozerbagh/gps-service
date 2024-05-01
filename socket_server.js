@@ -162,6 +162,7 @@ function websocketConnection(httpserver) {
       // You can broadcast this message to all connected WebSocket clients if needed
   
       // Check for custom events
+      console.log(message.toString())
       let data = {};
       try {
         data = JSON.parse(`${message}`);
