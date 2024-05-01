@@ -11,7 +11,6 @@ const userSchema = new Schema(
     busId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "buses",
-      required: true,
     },
     username: {
       type: String,
@@ -75,7 +74,6 @@ const userSchema = new Schema(
     schoolId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "schools",
-      required: true,
     },
   },
   { timestamps: true }
