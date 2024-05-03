@@ -33,7 +33,7 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    const ws = new WebSocket("ws://174.138.123.193:3006");
+    const ws = new WebSocket("ws://localhost:3006");
 
     ws.addEventListener("open", (event) => {
       console.log("WebSocket connection opened.", event);
@@ -63,9 +63,10 @@
           message: message,
         },
       };
-      setInterval(() => {
-        ws.send(JSON.stringify(sendMsgData));
-      }, 1000);
+      ws.send(JSON.stringify(sendMsgData));
+      // setInterval(() => {
+      //   ws.send(JSON.stringify(sendMsgData));
+      // }, 1000);
     });
   </script>
 </html>

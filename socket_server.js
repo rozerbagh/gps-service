@@ -134,14 +134,15 @@ function asciiDecode(uint8Array) {
 function handleCustomEvent(payload, websocket) {
   // Process payload
   console.log("Custom event received:", payload);
-
   // Send response back to client if needed
-  websocket.send(
-    JSON.stringify({
-      type: "SERVER_COORDS_MESSAGE",
-      payload: payload,
-    })
-  );
+  websocket.clients.forEach((client) => {
+    client.send(
+      JSON.stringify({
+        type: "SERVER_COORDS_MESSAGE",
+        payload: payload,
+      })
+    );
+  });
 }
 
 // Create a WebSocket server attached to the HTTP server
@@ -149,7 +150,8 @@ function websocketConnection(httpserver) {
   const wss = new WebSocket.Server({ server: httpserver });
 
   // Handle WebSocket connections
-  wss.on("connection", (ws) => {
+  wss.on("connection", (ws, request, client) => {
+    
     console.log("WebSocket client connected.");
 
     ws.on("open", (e) => {
@@ -160,19 +162,19 @@ function websocketConnection(httpserver) {
       console.log(`Received message from client: ${message}`);
       // Process the message received from the WebSocket client
       // You can broadcast this message to all connected WebSocket clients if needed
-  
+
       // Check for custom events
-      console.log(message.toString())
+      console.log(message);
       let data = {};
       try {
         data = JSON.parse(`${message}`);
-      } catch (err){
+      } catch (err) {
         data = JSON.parse(message);
       }
-      console.log(data)
+      console.log(data);
       if (data.type === "SEND_COORDS") {
         // Handle custom event
-        handleCustomEvent(data.payload, ws);
+        handleCustomEvent(data.payload, wss);
       }
     });
 
@@ -184,6 +186,7 @@ function websocketConnection(httpserver) {
       console.error("WebSocket error:", err);
     });
   });
+  
 
   const socketserver = net.createServer((_socket) => {
     console.log("GPS tracker connected.");
