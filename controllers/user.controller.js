@@ -5,6 +5,7 @@ const User = require("../models/user.model");
 const createError = require("http-errors");
 //userlogin
 const userLogin = async (req, res) => {
+  console.log("::: login ::::", req.body)
   try {
     const isAdmin = req.query.admin === "true" || req.query.admin === true;
     const isSchool = req.query.isSchool === "true" || req.query.isSchool === true;
@@ -38,10 +39,12 @@ const userLogin = async (req, res) => {
     } else {
       const er = createError(401, "password didn't match");
       res.errorResponse(er, "password didn't match", 401);
+      console.log(er, "password didn't match", 401, req.body);
     }
   } catch (error) {
     const er = createError(404, "User not found");
     res.errorResponse(er, "User not found", 404);
+    console.log(er, "password didn't match", 401, req.body);
   }
 };
 
