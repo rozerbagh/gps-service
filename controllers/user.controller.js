@@ -33,7 +33,17 @@ const userLogin = async (req, res) => {
         gps_id: user.gps_id,
         token: token,
         expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
-        bus:bus ? bus : null,
+        bus: bus
+          ? bus
+          : {
+              _id: null,
+              schoolId: null,
+              busname: "",
+              numberplate: "",
+              drivername: "",
+              driverphoneno: "",
+              capacity: 0,
+            },
       };
       res.successResponse(userData, succesmsg, 200);
     } else {
