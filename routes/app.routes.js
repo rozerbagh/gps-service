@@ -38,5 +38,12 @@ router.get("/school/getbyschoolid/:schoolid", checkToken, (req, res, next) =>
 );
 
 router.post("/push/notification", (req, res, next) => {});
+router.get("/mapbox-configs", (req, res, next) => {
+  res.status(200).json({
+    timestamps: 10,
+    mapbox_access_token: "",
+    mode_of_transport: "",
+  })
+});
 
 module.exports = router;
