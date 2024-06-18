@@ -1,4 +1,5 @@
 const Schools = require("../models/schools.model");
+const MBConfigs = require("../models/mapboxconfigs.model");
 const { pushNotification } = require("../middlewares/firebase");
 async function getSchoolWithBuses(req, res) {
   console.log(req.params.schoolId);
@@ -35,8 +36,18 @@ async function sendNotification(req, res) {
   }
 }
 
+async function showMabConfigs(req, res) {
+  try {
+    const data = await MBConfigs.find();
+    res.status(200).json(data[0]);
+  } catch (error) {
+    const er = createError(501, "Internal server error");
+    res.errorResponse(er, "Internal server error", 501);
+  }
+}
 
 module.exports = {
   getSchoolWithBuses,
   sendNotification,
+  showMabConfigs,
 };

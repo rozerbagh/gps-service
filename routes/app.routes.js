@@ -5,7 +5,7 @@ const funcController = require("../controllers/function.controller");
 const { checkToken } = require("../middlewares/auth.middleware");
 const Schools = require("../models/schools.model");
 const Buses = require("../models/buses.model");
-
+const MBConfigs = require("../models/mapboxconfigs.model");
 // const status = ["ordered", "dispatched", "shipped", "delivered"];
 router.post("/school/add", checkToken, (req, res, next) => {
   dataController.create(req, res, next, Schools);
@@ -38,12 +38,11 @@ router.get("/school/getbyschoolid/:schoolid", checkToken, (req, res, next) =>
 );
 
 router.post("/push/notification", (req, res, next) => {});
-router.get("/mapbox-configs", (req, res, next) => {
-  res.status(200).json({
-    timestamps: 10,
-    mapbox_access_token: "",
-    mode_of_transport: "",
-  })
-});
+router.post("/mapbox-configs/create", (req, res, next) =>
+  dataController.create(req, res, next, MBConfigs)
+);
+router.get("/mapbox-configs/get", (req, res, next) =>
+  funcController.showMabConfigs(req, res, next)
+);
 
 module.exports = router;
