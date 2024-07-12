@@ -2,15 +2,22 @@
   "name": "device-api",
   "version": "1.0.0",
   "description": "this is a beckend service for sending data from device to db",
-  "main": "server.js",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
-    "server": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "NODE_ENV=dev npx nodemon",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "buil:prod": "NODE_ENV=prod npm run build",
+    "prestart": "npm run build",
+    "start": "node ."
   },
   "author": "Devil1165",
   "license": "ISC",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/nodemailer": "^6.4.15",
+    "@types/ws": "^8.5.10",
     "@vonage/server-sdk": "^3.10.0",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
@@ -26,11 +33,18 @@
     "mongoose": "^5.3.9",
     "node-gpsd": "^0.3.4",
     "nodemailer": "^6.9.7",
-    "nodemon": "^2.0.22",
     "razorpay": "^2.9.2",
     "serialport": "^12.0.0",
     "socket.io": "^4.7.2",
     "twilio": "^4.19.3",
     "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^18.19.39",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.2",
+    "tslint": "^6.1.3",
+    "typescript": "^5.5.3"
   }
 }
