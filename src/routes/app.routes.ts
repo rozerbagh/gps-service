@@ -71,10 +71,10 @@ router.get(
     show(Buses, req, res, next, { path: "", value: "" })
 );
 
-router.post(
-  "/push/notification",
-  (req: Request, res: Response, next: NextFunction) => {}
-);
+// router.post(
+//   "/push/notification",
+//   (req: Request, res: Response, next: NextFunction) => {}
+// );
 // router.post(
 //   "/mapbox-configs/create",
 //   (req: Request, res: Response, next: NextFunction) =>

@@ -8,7 +8,7 @@
     "start:dev": "NODE_ENV=dev npx nodemon",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
-    "buil:prod": "NODE_ENV=prod npm run build",
+    "build:prod": "NODE_ENV=prod npm run build",
     "prestart": "npm run build",
     "start": "node ."
   },
@@ -34,6 +34,7 @@
     "node-gpsd": "^0.3.4",
     "nodemailer": "^6.9.7",
     "razorpay": "^2.9.2",
+    "sequelize": "^6.37.3",
     "serialport": "^12.0.0",
     "socket.io": "^4.7.2",
     "twilio": "^4.19.3",

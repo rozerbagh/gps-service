@@ -1,4 +1,5 @@
 import express, { Application } from "express";
+import dotenv from "dotenv"
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import appsRoutes from "./routes/app.routes";
@@ -7,8 +8,7 @@ import cors from "cors";
 import { responseEnhancer } from "./middlewares/commonResponse";
 // Initialize the express engine
 const app: Application = express();
-
-require("dotenv").config();
+dotenv.config();
 
 const corsOptions = {
   origin: "*",
@@ -29,11 +29,10 @@ mongoose
     }
   )
   .then((res) => {
-    // console.log(res)
-    console.log("mongodb is connected successfully");
+    // console.log("mongodb is connected successfully");
   })
   .catch((err) => {
-    console.log(err);
+    // console.log(err);
   });
 
 // setting up the cors
@@ -45,11 +44,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 // app.post("/sms/inbound", (req, res) => {
-//   console.log(req.body);
+//   // console.log(req.body);
 //   res.send(req.body);
 // });
 // app.post("/sms/status", (req, res) => {
-//   console.log(req.body);
+//   // console.log(req.body);
 //   res.send(req.body);
 // });
 app.use(express.static("public"));
@@ -66,7 +65,7 @@ app.get("/", (req, res, next) => {
   });
 });
 app.post("/", (req, res, next) => {
-  console.log(":::: post requests ::::", req.body, req.query, req.params);
+  // console.log(":::: post requests ::::", req.body, req.query, req.params);
   res.status(200).json({
     message: ".....server is running",
     credit: "powered by -Ambee",
@@ -77,7 +76,7 @@ app.post("/", (req, res, next) => {
 // Create a route to handle incoming GPS data
 app.post("/gps", (req, res) => {
   const gpsData = req.body; // Assuming Sinotrack sends JSON data
-  console.log("Received GPS data:", gpsData);
+  // console.log("Received GPS data:", gpsData);
   // Process the GPS data as needed
   res.sendStatus(200); // Send a response to the tracker
 });
@@ -96,5 +95,5 @@ app.use((req, res, next) => {
   }
   next();
 });
-const Applications = { app: app, websockets: (ws: any) => ws };
+const Applications = { app, websockets: (ws: any) => ws };
 export default Applications;

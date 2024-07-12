@@ -11,7 +11,7 @@ type ModelsInteface =
   | BusesModelInterface
   | SchoolsModelInterface
   | BusRoutesModelInterface;
-  
+
 export const create = async (
   model: ModelsInteface,
   req: Request,
@@ -22,12 +22,11 @@ export const create = async (
     const data = new  model({ ...req.body });
     await data.save();
     res.status(200).json({
-      data: data,
+      data,
       message: "Succesfully created / added !",
       statusCode: 200,
     });
   } catch (error) {
-    console.log(error)
     res
       .status(500)
       .json({ error, message: "Unable to created !", statusCode: 500 });
@@ -71,14 +70,12 @@ export const show = async (
     value: string;
   },
 ) => {
-  console.log(mongoose.Types.ObjectId.isValid(req.params.id));
   try {
-    let data = await model.findById(req.params.id).populate(attr.path);
+    const data = await model.findById(req.params.id).populate(attr.path);
     res
       .status(200)
       .json({ data, message: "Succesfull!", statusCode: 200 });
   } catch (error) {
-    console.log(error)
     res
       .status(500)
       .json({ error, message: "Unable to fetched !", statusCode: 500 });

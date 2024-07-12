@@ -1,5 +1,8 @@
-const admin = require("firebase-admin");
-
+import admin from "firebase-admin";
+import serviceAccount from "./gurukulagamanam-firebase-adminsdk-nefe2-d54afb623b.json";
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 // Initialize Firebase Admin SDK
 const fireabseDetails = {
   piKey: "AIzaSyDkYJA21bHxh8RdaVVuojEu9cKdmySAh7g",
@@ -12,12 +15,8 @@ const fireabseDetails = {
   serverKey:
     "AAAADzQSeJE:APA91bF72agyAm0sgkEnTJja81T0LA1r_r7p1FjvBz-UtolJtM1qxt60wz7IUMX3tTd4SxISGaZM-D8QSQ4nXtBfRjLR-K_JcrFNxJ9wgZek8dhNGmfVwXfJ3dNarKY-HwIAqB7VpveU",
 };
-const serviceAccount = require("./gurukulagamanam-firebase-adminsdk-nefe2-d54afb623b.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
-async function pushNotification(clientDetails: any) {
+async function pushNotification(clientDetails) {
   let notificationPushed = false;
   try {
     const message = {
@@ -33,12 +32,11 @@ async function pushNotification(clientDetails: any) {
     await admin
       .messaging()
       .send(message)
-      .then((response: any) => {
-        console.log("Notification sent:", response);
+      .then((response) => {
         notificationPushed = true;
       })
-      .catch((error: any) => {
-        console.log("Error sending notification:", error);
+      .catch((error) => {
+        notificationPushed = false;
       });
     return;
   } catch (error) {

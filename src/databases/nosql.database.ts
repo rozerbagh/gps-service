@@ -10,6 +10,6 @@ export default function connect_mongodb(urls: ConnectionURLS): void {
       return "";
     })
     .catch((error): void => {
-      new Error("error: mongodb connection");
+      return
     });
 }

@@ -2,22 +2,21 @@ import { Request, Response, NextFunction } from "express";
 import Razorpay from "razorpay";
 import Subscription from "../models/subscription.model";
 import { CustomResponse } from "../interface/responseIntreface";
-var instance = new Razorpay({
+const instance = new Razorpay({
   key_id: "YOUR_KEY_ID",
   key_secret: "YOUR_KEY_SECRET",
 });
 async function createOrder(req: Request, res: Response, next: NextFunction) {
   try {
     const { amount } = req.body;
-    var options = {
+    const options = {
       amount: amount || 100, // amount in the smallest currency unit
       currency: "INR",
       receipt: "order_rcptid_" + Date.now(),
     };
     let orderDetails = null;
-    instance.orders.create(options, function (err: any, order: any) {
+    instance.orders.create(options, (err: any, order: any) => {
       orderDetails = order;
-      console.log(order);
       res.successResponse([...order], "Razorpay order has created!", 200);
     });
   } catch (err) {

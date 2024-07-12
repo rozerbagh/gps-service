@@ -28,14 +28,14 @@ const gpsDataFunc = (gpsData: string): GPSDataFuncResult => {
     const date = fields[3];
     const time = fields[9];
 
-    console.log("===========================");
-    console.log(`Identifier: ${identifier}`);
-    console.log(`Latitude: ${latitude}`);
-    console.log(`Longitude: ${longitude}`);
-    console.log(`Speed: ${speed}`);
-    console.log(`Date: ${date}`);
-    console.log(`Time: ${time}`);
-    console.log("===========================");
+    // console.log("===========================");
+    // console.log(`Identifier: ${identifier}`);
+    // console.log(`Latitude: ${latitude}`);
+    // console.log(`Longitude: ${longitude}`);
+    // console.log(`Speed: ${speed}`);
+    // console.log(`Date: ${date}`);
+    // console.log(`Time: ${time}`);
+    // console.log("===========================");
 
     if (!identifier) {
       return {
@@ -84,7 +84,7 @@ const gpsDataFunc = (gpsData: string): GPSDataFuncResult => {
       };
     }
   } catch (error: any) {
-    console.log(error);
+    // console.log(error);
     return {
       data: JSON.stringify({
         identifier: "9172159029",
@@ -125,30 +125,30 @@ function dataToBasicBuffer(params: string): void {
   const json = { data: base64Data };
   const jsonString = JSON.stringify(json);
 
-  console.log("===== dataToBasicBuffer =====", buf.toString(), buf, jsonString);
+  // console.log("===== dataToBasicBuffer =====", buf.toString(), buf, jsonString);
   // output {"data":"AQID"}
 }
 
 function utf8Decode(buffer: Uint8Array): string {
   const decoder = new TextDecoder("utf-8");
-  console.log("===utf8Decode===", decoder, decoder.decode(buffer));
+  // console.log("===utf8Decode===", decoder, decoder.decode(buffer));
   return decoder.decode(buffer);
 }
 
 function asciiDecode(uint8Array: Uint8Array): string {
   const decoder = String.fromCharCode.apply(null, Array.from(uint8Array));
-  console.log("====asciiDecode ====", decoder);
+  // console.log("====asciiDecode ====", decoder);
   return decoder;
 }
 
 function handleCustomEvent(payload: any, websocket: Server): void {
-  console.log("Custom event received:", payload);
+  // console.log("Custom event received:", payload);
   websocket.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(
         JSON.stringify({
           type: "SERVER_COORDS_MESSAGE",
-          payload: payload,
+          payload,
         })
       );
     }
@@ -162,19 +162,19 @@ function websocketConnection(httpserver: HttpServer): {
   const wss = new WebSocket.Server({ server: httpserver });
 
   wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
-    console.log("WebSocket client connected.");
+    // console.log("WebSocket client connected.");
 
     ws.on("open", () => {
       ws.send("server websocket is ready to send message");
     });
 
     ws.on("message", (message: string) => {
-      console.log(`Received message from client: ${message}`);
+      // console.log(`Received message from client: ${message}`);
       let data: any;
       try {
         data = JSON.parse(message);
       } catch (err) {
-        console.log("Error parsing JSON:", err);
+        // console.log("Error parsing JSON:", err);
         return;
       }
 
@@ -184,22 +184,22 @@ function websocketConnection(httpserver: HttpServer): {
     });
 
     ws.on("close", () => {
-      console.log("WebSocket client disconnected.");
+      // console.log("WebSocket client disconnected.");
     });
 
     ws.on("error", (err: Error) => {
-      console.error("WebSocket error:", err);
+      // console.error("WebSocket error:", err);
     });
   });
 
   const socketserver = net.createServer((socket: Socket) => {
-    console.log("GPS tracker connected.");
+    // console.log("GPS tracker connected.");
 
     socket.on("data", (data: Buffer) => {
-      console.log("GPS data =============== ", data);
+      // console.log("GPS data =============== ", data);
       const gpsData = data.toString("utf8");
       const res = gpsDataFunc(gpsData);
-      console.log(res);
+      // console.log(res);
 
       if (res.data !== null) {
         wss.clients.forEach((client) => {
@@ -211,11 +211,11 @@ function websocketConnection(httpserver: HttpServer): {
     });
 
     socket.on("close", () => {
-      console.log("GPS tracker disconnected.");
+      // console.log("GPS tracker disconnected.");
     });
 
     socket.on("error", (err: Error) => {
-      console.error("Socket error:", err);
+      // console.error("Socket error:", err);
     });
   });
 
