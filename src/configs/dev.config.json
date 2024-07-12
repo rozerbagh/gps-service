@@ -1,0 +1,25 @@
+{
+  "nosqldburi": "mongodb://localhost:27017/todo",
+  "sqldburi": "mongodb://localhost:3306/",
+  "port": 5000,
+  "sequelize": {
+    "connectionLimit": 1000,
+    "host": "localhost:3306",
+    "user": "root",
+    "password": "admin$123",
+    "database": "db1",
+    "dialect": "mysql",
+    "port": 3306,
+    "multipleStatements": true
+  },
+  "title": "firbase",
+  "firebaseConfig": {
+    "apiKey": "AIzaSyBydfrd8NC_hfVf4d4Si5V_Nfe9a2DevH8",
+    "authDomain": "rozer-portfolio.firebaseapp.com",
+    "projectId": "rozer-portfolio",
+    "storageBucket": "rozer-portfolio.appspot.com",
+    "messagingSenderId": "210907175278",
+    "appId": "1:210907175278:web:bdfe3159936843f808c97f",
+    "measurementId": "G-X944CBMVGL"
+  }
+}
