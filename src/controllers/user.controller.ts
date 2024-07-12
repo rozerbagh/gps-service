@@ -11,15 +11,15 @@ import {
 import Users, { UserDoc } from "../models/user.model";
 import Buses from "../models/buses.model";
 import { CustomResponse } from "../interface/responseIntreface";
-//userlogin
+// userlogin
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
-    const user = await Users.findOne({ email: email });
-    console.log(user)
+    const user = await Users.findOne({ email });
+    // console.log(user)
     if(user){
       const isMatch = await passwordComparing(password, user.password);
-      console.log(isMatch)
+      // console.log(isMatch)
       if (isMatch) {
         const token = await generateToken({
           id: user._id.toString(),
@@ -27,7 +27,7 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
         });
         const bus_id = user.busId;
         const bus = await Buses.findById(bus_id).exec();
-        console.log(bus);
+        // console.log(bus);
         const userData = {
           userId: user._id,
           email: user.email,
@@ -36,7 +36,7 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
           role: user.role,
           subscribed: user.subscribed,
           gps_id: user.gps_id,
-          token: token,
+          token,
           expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
           bus: bus
             ? bus
@@ -60,18 +60,18 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
       } else {
         const er = createError(402, "password didn't match");
         res.status(402).json({error: er, message: "password didn't match", statusCode: 402});
-        console.log(er, "password didn't match", 401, req.body);
+        // console.log(er, "password didn't match", 401, req.body);
       }
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     const er = createError(404, "User not found");
-    console.log(er, "password didn't match", 401, req.body);
+    // console.log(er, "password didn't match", 401, req.body);
     res.status(401).json({error: er, message: "User not found", statusCode: 404});
   }
 };
 
-//addusers
+// addusers
 const addUser = async (
   req: Request,
   res: Response,
@@ -99,16 +99,16 @@ const addUser = async (
     } = req.body;
     const hashPassword = await passwordHashing(password);
     const user = new Users({
-      busId: busId,
-      username: username,
-      fullname: fullname,
-      email: email,
+      busId,
+      username,
+      fullname,
+      email,
       password: hashPassword,
-      phoneno: phoneno,
-      address: address,
-      role: role,
-      status: status,
-      image: image,
+      phoneno,
+      address,
+      role,
+      status,
+      image,
     });
     const data = await user.save();
     const token = await generateToken({
@@ -121,7 +121,7 @@ const addUser = async (
       userName: user.fullname,
       phoneno: user.phoneno,
       role: user.role,
-      token: token,
+      token,
       expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
     };
     res.status(200).json({
@@ -133,7 +133,7 @@ const addUser = async (
     res.status(401).json({error, message: "Unable to signup! Internal server error", statusCode: 500});
   }
 };
-//getallusers
+// getallusers
 const getallUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await Users.find({}).select("-password");
@@ -210,7 +210,7 @@ const sendOtp = async (req: Request, res: Response, next: NextFunction) => {
     // const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_APIKEY}&route=otp&variables_values=${OTP}&flash=1&numbers=${phoneNumber}`;
     // const otpResponse = await fetch(url);
     const data = await Users.findOneAndUpdate(
-      { email: email },
+      { email },
       {
         otp: parseInt(OTP),
       }

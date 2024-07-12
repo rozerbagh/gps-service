@@ -5,7 +5,7 @@ import process from "process";
 
 const numCPUs = os.cpus().length;
 if (cluster.isPrimary) {
-  console.log(`Primary ${process.pid} is running`);
+  // console.log(`Primary ${process.pid} is running`);
 
   // Fork workers.
   for (let i = 1; i <= numCPUs; i++) {
@@ -17,7 +17,7 @@ if (cluster.isPrimary) {
 
   // Handle termination signals to gracefully exit the cluster
   process.on("SIGTERM", () => {
-    console.log("Received SIGTERM signal. Exiting gracefully...");
+    // console.log("Received SIGTERM signal. Exiting gracefully...");
     // Send a termination signal to all worker processes
     for (const workerId in cluster.workers) {
       cluster?.workers[workerId]?.send("shutdown");
@@ -26,7 +26,7 @@ if (cluster.isPrimary) {
 
   // Handle worker process exits and restart them
   cluster.on("exit", (worker, code, signal) => {
-    console.log(`Worker ${worker.process.pid} died`);
+    // console.log(`Worker ${worker.process.pid} died`);
     cluster.fork();
   });
 } else {
@@ -40,15 +40,15 @@ if (cluster.isPrimary) {
   //   })
   //   .listen(8010 + i);
 
-  console.log(`Worker ${process.pid} started`);
+  // console.log(`Worker ${process.pid} started`);
   // Handle messages from the master process
   process.on("message", (msg) => {
-    console.log(`Worker ${process.pid} received message from Master:`, msg);
+    // console.log(`Worker ${process.pid} received message from Master:`, msg);
 
     // Send a message back to the master process
     // process?.send({ message: "Hello Master", from: "Worker" + process.pid });
     if (msg === "shutdown") {
-      console.log(`Worker ${process.pid} received shutdown signal. Exiting...`);
+      // console.log(`Worker ${process.pid} received shutdown signal. Exiting...`);
       // Perform cleanup or other necessary tasks before exiting
       process.exit(0);
     }

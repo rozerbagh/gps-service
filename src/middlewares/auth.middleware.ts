@@ -23,8 +23,8 @@ export const checkToken = async (
   try {
     let token: string =
       (req.headers["x-access-token"] as string) ||
-      (req.headers["authorization"] as string) ||
-      (req.headers["Authorization"] as string); // Express headers are auto converted to lowercase
+      (req.headers.authorization as string) ||
+      (req.headers.Authorization as string); // Express headers are auto converted to lowercase
     if (token) {
       if (token.startsWith("Bearer ") || token.startsWith("bearer ")) {
         token = token.slice(7, token.length);
@@ -57,7 +57,7 @@ export const checkToken = async (
       });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(404).json({
       statuscode: "404",
       status: false,
@@ -75,15 +75,15 @@ export const checkAdminToken = async (
   // req.body.token || req.query.token ||
   // invalid token - synchronous
   try {
-    var token =
+    let token =
       (req.headers["x-access-token"] as string) ||
-      (req.headers["authorization"] as string); // Express headers are auto converted to lowercase
+      (req.headers.authorization as string); // Express headers are auto converted to lowercase
     if (token) {
       if (token.startsWith("Bearer ")) {
         token = token.slice(7, token.length);
       }
       const decoded = jwt.verify(token, _conf.secretKey) as any;
-      // console.log(decoded.data)
+      // // console.log(decoded.data)
       const user = await Users.findById({ _id: decoded.data._id });
       if (!user)
         return res.status(404).json({
@@ -105,14 +105,14 @@ export const checkAdminToken = async (
 };
 
 export const validateEmail = (email: string): boolean => {
-  var re =
+  let re =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 };
 export async function passwordHashing(password: string): Promise<string> {
-  var salt = bcrypt.genSaltSync(10);
-  var hash = bcrypt.hashSync("B4c0//", salt);
-  var passwordHash = await bcrypt.hash(password, 8);
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync("B4c0//", salt);
+  let passwordHash = await bcrypt.hash(password, 8);
   return passwordHash;
 }
 export async function passwordComparing(
@@ -120,10 +120,10 @@ export async function passwordComparing(
   hashPassword: string
 ): Promise<boolean> {
   try{
-  var isMatch = await bcrypt.compare(password, hashPassword);
+  let isMatch = await bcrypt.compare(password, hashPassword);
   return isMatch;
   } catch(er){
-    console.log(er)
+    // console.log(er)
     return false
   }
 }

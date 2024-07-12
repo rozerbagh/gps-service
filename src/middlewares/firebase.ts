@@ -34,11 +34,11 @@ async function pushNotification(clientDetails: any) {
       .messaging()
       .send(message)
       .then((response: any) => {
-        console.log("Notification sent:", response);
+        // console.log("Notification sent:", response);
         notificationPushed = true;
       })
       .catch((error: any) => {
-        console.log("Error sending notification:", error);
+        // console.log("Error sending notification:", error);
       });
     return;
   } catch (error) {

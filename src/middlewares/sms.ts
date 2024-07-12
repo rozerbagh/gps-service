@@ -11,19 +11,19 @@ const fs = require("fs");
 const privateKey = fs.readFileSync("middlewares/vonage-private.key", "utf8");
 const vonage = new Vonage({
   applicationId: "78404d71-0441-4e21-b3d5-d4ba9ec0ae43",
-  privateKey: privateKey,
+  privateKey,
 });
 
 async function sendMessage(text, to_number, from_number) {
   await vonage.messages
     .send({
-      text: text,
+      text,
       message_type: "text",
       to: to_number,
       from: from_number,
       channel: "sms",
     })
-    .then((resp) => console.log(resp))
+    .then((resp) => // console.log(resp))
     .catch((err) => console.error(err));
 }
 
@@ -34,11 +34,11 @@ async function sendSMS() {
   await vonage.sms
     .send({ to, from, text })
     .then((resp) => {
-      console.log("Message sent successfully");
-      console.log(resp);
+      // console.log("Message sent successfully");
+      // console.log(resp);
     })
     .catch((err) => {
-      console.log("There was an error sending the messages.");
+      // console.log("There was an error sending the messages.");
       console.error(err);
     });
 }
@@ -60,7 +60,7 @@ const messageBody = "Hello from Node.js!";
 //     from: fromNumber,
 //     to: toNumber,
 //   })
-//   .then((message) => console.log(`Message SID: ${message.sid}`))
+//   .then((message) => // console.log(`Message SID: ${message.sid}`))
 //   .catch((err) => console.error(err));
 
 async function sendOtp() {
@@ -78,7 +78,7 @@ async function sendOtp() {
   await axios
     .request(options)
     .then(function (response) {
-      console.log(response.data);
+      // console.log(response.data);
     })
     .catch(function (error) {
       console.error(error);

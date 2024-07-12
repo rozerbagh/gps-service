@@ -11,7 +11,7 @@ type ConnectionURLS = {
 };
 export const connect_MYSQL = (dbURLs: ConnectionURLS): any => {
   const connectionURl = `${dbURLs.dialect}://${dbURLs.user}:${dbURLs.password}@${dbURLs.host}/${dbURLs.database}`;
-  console.log(connectionURl);
+  // console.log(connectionURl);
   const _Sequelize = new Sequelize(connectionURl);
   (async () => {
     try {

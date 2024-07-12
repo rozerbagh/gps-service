@@ -8,8 +8,8 @@ const httpserver = createServer(app);
 const socketserver = websocketConnection(httpserver);
 websockets(socketserver);
 httpserver.listen(HTTP_SERVER_PORT, () => {
-  console.log("server is running on port : " + HTTP_SERVER_PORT);
+  // console.log("server is running on port : " + HTTP_SERVER_PORT);
 });
 socketserver.net.listen(SOCKET_SERVER_PORT, () => {
-  console.log(`GPS socket server is listening on port ${SOCKET_SERVER_PORT}`);
+  // console.log(`GPS socket server is listening on port ${SOCKET_SERVER_PORT}`);
 });
