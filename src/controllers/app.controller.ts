@@ -27,7 +27,6 @@ export const create = async (
       statusCode: 200,
     });
   } catch (error) {
-    // console.log(error)
     res
       .status(500)
       .json({ error, message: "Unable to created !", statusCode: 500 });
@@ -71,14 +70,12 @@ export const show = async (
     value: string;
   },
 ) => {
-  // console.log(mongoose.Types.ObjectId.isValid(req.params.id));
   try {
     const data = await model.findById(req.params.id).populate(attr.path);
     res
       .status(200)
       .json({ data, message: "Succesfull!", statusCode: 200 });
   } catch (error) {
-    // console.log(error)
     res
       .status(500)
       .json({ error, message: "Unable to fetched !", statusCode: 500 });

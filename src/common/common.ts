@@ -1,14 +1,13 @@
 import nodemailer from "nodemailer";
 const { createTransport } = nodemailer;
-export function generateOtp() {
-  let digits = "0123456789";
+export const generateOtp = (): number => {
+  const digits = "0123456789";
   let OTP = "";
   for (let i = 0; i < 6; i++) {
     OTP += digits[Math.floor(Math.random() * 10)];
   }
-  // console.log(OTP);
-  return OTP;
-}
+  return parseInt(OTP, 10);
+};
 
 export async function sendEmail(mailbody: {
   from: string;

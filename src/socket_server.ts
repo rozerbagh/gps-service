@@ -188,7 +188,7 @@ function websocketConnection(httpserver: HttpServer): {
     });
 
     ws.on("error", (err: Error) => {
-      console.error("WebSocket error:", err);
+      // console.error("WebSocket error:", err);
     });
   });
 
@@ -215,7 +215,7 @@ function websocketConnection(httpserver: HttpServer): {
     });
 
     socket.on("error", (err: Error) => {
-      console.error("Socket error:", err);
+      // console.error("Socket error:", err);
     });
   });
 

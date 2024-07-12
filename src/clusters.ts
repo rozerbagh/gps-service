@@ -20,7 +20,9 @@ if (cluster.isPrimary) {
     // console.log("Received SIGTERM signal. Exiting gracefully...");
     // Send a termination signal to all worker processes
     for (const workerId in cluster.workers) {
-      cluster?.workers[workerId]?.send("shutdown");
+      if(cluster){
+        cluster.workers[workerId]?.send("shutdown");
+      }
     }
   });
 

@@ -1,4 +1,5 @@
 import express, { Application } from "express";
+import dotenv from "dotenv"
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import appsRoutes from "./routes/app.routes";
@@ -7,8 +8,7 @@ import cors from "cors";
 import { responseEnhancer } from "./middlewares/commonResponse";
 // Initialize the express engine
 const app: Application = express();
-
-require("dotenv").config();
+dotenv.config();
 
 const corsOptions = {
   origin: "*",
@@ -29,7 +29,6 @@ mongoose
     }
   )
   .then((res) => {
-    // // console.log(res)
     // console.log("mongodb is connected successfully");
   })
   .catch((err) => {

@@ -9,7 +9,7 @@ type ConnectionURLS = {
   port: number;
   multipleStatements: boolean;
 };
-export const connect_MYSQL = (dbURLs: ConnectionURLS): any => {
+export const connectMYSQL = (dbURLs: ConnectionURLS): any => {
   const connectionURl = `${dbURLs.dialect}://${dbURLs.user}:${dbURLs.password}@${dbURLs.host}/${dbURLs.database}`;
   // console.log(connectionURl);
   const _Sequelize = new Sequelize(connectionURl);
@@ -22,4 +22,4 @@ export const connect_MYSQL = (dbURLs: ConnectionURLS): any => {
   })();
   return { sequilize: _Sequelize, DataTypes: Sequelize };
 };
-export default connect_MYSQL;
+export default connectMYSQL;

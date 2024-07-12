@@ -16,18 +16,15 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
-    // console.log(user)
     if(user){
       const isMatch = await passwordComparing(password, user.password);
-      // console.log(isMatch)
       if (isMatch) {
         const token = await generateToken({
           id: user._id.toString(),
           email: user.email,
         });
-        const bus_id = user.busId;
-        const bus = await Buses.findById(bus_id).exec();
-        // console.log(bus);
+        const busid = user.busId;
+        const bus = await Buses.findById(busid).exec();
         const userData = {
           userId: user._id,
           email: user.email,
@@ -60,13 +57,10 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
       } else {
         const er = createError(402, "password didn't match");
         res.status(402).json({error: er, message: "password didn't match", statusCode: 402});
-        // console.log(er, "password didn't match", 401, req.body);
       }
     }
   } catch (error) {
-    // console.log(error);
     const er = createError(404, "User not found");
-    // console.log(er, "password didn't match", 401, req.body);
     res.status(401).json({error: er, message: "User not found", statusCode: 404});
   }
 };
@@ -212,7 +206,7 @@ const sendOtp = async (req: Request, res: Response, next: NextFunction) => {
     const data = await Users.findOneAndUpdate(
       { email },
       {
-        otp: parseInt(OTP),
+        otp: OTP,
       }
     );
     res

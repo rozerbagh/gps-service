@@ -57,7 +57,6 @@ export const checkToken = async (
       });
     }
   } catch (err) {
-    // console.log(err);
     return res.status(404).json({
       statuscode: "404",
       status: false,
@@ -83,7 +82,6 @@ export const checkAdminToken = async (
         token = token.slice(7, token.length);
       }
       const decoded = jwt.verify(token, _conf.secretKey) as any;
-      // // console.log(decoded.data)
       const user = await Users.findById({ _id: decoded.data._id });
       if (!user)
         return res.status(404).json({
@@ -105,14 +103,14 @@ export const checkAdminToken = async (
 };
 
 export const validateEmail = (email: string): boolean => {
-  let re =
+  const re =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 };
 export async function passwordHashing(password: string): Promise<string> {
-  let salt = bcrypt.genSaltSync(10);
-  let hash = bcrypt.hashSync("B4c0//", salt);
-  let passwordHash = await bcrypt.hash(password, 8);
+  // const salt = bcrypt.genSaltSync(10);
+  // const hash = bcrypt.hashSync("B4c0//", salt);
+  const passwordHash = await bcrypt.hash(password, 8);
   return passwordHash;
 }
 export async function passwordComparing(
@@ -120,10 +118,9 @@ export async function passwordComparing(
   hashPassword: string
 ): Promise<boolean> {
   try{
-  let isMatch = await bcrypt.compare(password, hashPassword);
+  const isMatch = await bcrypt.compare(password, hashPassword);
   return isMatch;
   } catch(er){
-    // console.log(er)
     return false
   }
 }
