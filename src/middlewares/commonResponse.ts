@@ -24,11 +24,11 @@ export const responseEnhancer = (
 };
 
 export const commonResponseJson = (statusCode: number, message: string, data?: any | null, error?: any | null) => ({
-  statusCode,
+  statusCode: statusCode,
   response: {
     status: true,
-    message,
-    data,
-    error,
+    message: message,
+    data: data,
+    error: error,
   },
 });
