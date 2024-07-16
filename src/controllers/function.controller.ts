@@ -13,8 +13,8 @@ export async function getSchoolWithBuses(
     const result = await Schools.findById({ _id: req.params.schoolId });
     if (!result) {
       const error = createError(404, "School not found!");
-      const responseJson = commonResponseJson(404, "School not found!", null, error);
-      res.status(404).json({ ...responseJson });
+      const _responseJson = commonResponseJson(404, "School not found!", null, error);
+      res.status(404).json({ ..._responseJson });
       return;
     }
     const schoolsBuses = await result?.getSchoolWithBuses();
