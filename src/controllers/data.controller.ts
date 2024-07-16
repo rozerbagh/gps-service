@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomResponse } from "../interface/responseIntreface";
 export const create = async (
   model: any,
   req: Request,
