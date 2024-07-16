@@ -4,7 +4,7 @@ import { UserModelInterface } from "../models/user.model";
 import { BusesModelInterface } from "../models/buses.model";
 import { SchoolsModelInterface } from "../models/schools.model";
 import { BusRoutesModelInterface } from "../models/busRoutes.model";
-import { CustomResponse } from "../interface/responseIntreface";
+import { commonResponseJson } from "../middlewares/commonResponse";
 
 type ModelsInteface =
   | UserModelInterface
@@ -19,17 +19,23 @@ export const create = async (
   next: NextFunction
 ) => {
   try {
-    const data = new  model({ ...req.body });
+    const data = new model({ ...req.body });
     await data.save();
-    res.status(200).json({
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully created / added !",
       data,
-      message: "Succesfully created / added !",
-      statusCode: 200,
-    });
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error, message: "Unable to created !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to created / added !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };
 
@@ -48,15 +54,23 @@ export const index = async <T extends Document>(
       .find({})
       .select("-passwordHash")
       .populate(attr.path)
-      .exec();;
-    res
-      .status(200)
-      .json({ data, message: "Succesfully fetched !", statusCode: 200 });
+      .exec();
+
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully fetched !",
+      data,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    next();
-    res
-      .status(500)
-      .json({ error, message: "Unable to created !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to created !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };
 
@@ -68,39 +82,55 @@ export const show = async (
   attr: {
     path: string;
     value: string;
-  },
+  }
 ) => {
   try {
     const data = await model.findById(req.params.id).populate(attr.path);
-    res
-      .status(200)
-      .json({ data, message: "Succesfull!", statusCode: 200 });
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully fetched !",
+      data,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error, message: "Unable to fetched !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to fetched !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };
 
-export const update = async <T extends Document> (
+export const update = async <T extends Document>(
   model: Model<T>,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const data = await model.findByIdAndUpdate({ where: { id: req.params.id } });
-    res
-      .status(200)
-      .json({ data, message: "Succesfully updated !", statusCode: 200 });
+    const data = await model.findByIdAndUpdate({
+      where: { id: req.params.id },
+    });
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully updated !",
+      data,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    next();
-    res
-      .status(500)
-      .json({ error, message: "Unable to update !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to update !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };
-
 
 export const destroy = async (
   model: ModelsInteface,
@@ -109,14 +139,23 @@ export const destroy = async (
   next: NextFunction
 ) => {
   try {
-    const data = await model.findByIdAndRemove({ where: { id: req.params.id } });
-    res
-      .status(200)
-      .json({ data, message: "Succesfully removed !", statusCode: 200 });
+    const data = await model.findByIdAndRemove({
+      where: { id: req.params.id },
+    });
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully removed !",
+      data,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    next();
-    res
-      .status(500)
-      .json({ error, message: "Unable to removed !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to removed !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };

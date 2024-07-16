@@ -22,3 +22,13 @@ export const responseEnhancer = (
   };
   next();
 };
+
+export const commonResponseJson = (statusCode: number, message: string, data?: any | null, error?: any | null) => ({
+  statusCode: statusCode,
+  response: {
+    status: true,
+    message: message,
+    data: data,
+    error: error,
+  },
+});

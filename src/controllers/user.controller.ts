@@ -3,20 +3,18 @@ import createError from "http-errors";
 import {
   passwordComparing,
   generateToken,
-  passwordHashing
+  passwordHashing,
 } from "../middlewares/auth.middleware";
-import {
-  generateOtp, sendEmail
-} from "../common/common";
+import { generateOtp, sendEmail } from "../common/common";
 import Users, { UserDoc } from "../models/user.model";
 import Buses from "../models/buses.model";
-import { CustomResponse } from "../interface/responseIntreface";
+import { commonResponseJson } from "../middlewares/commonResponse";
 // userlogin
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
     const user = await Users.findOne({ email });
-    if(user){
+    if (user) {
       const isMatch = await passwordComparing(password, user.password);
       if (isMatch) {
         const token = await generateToken({
@@ -47,36 +45,50 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
                 capacity: 0,
               },
         };
-        res
-          .status(200)
-          .json({
-            data: userData,
-            message: "Login successfully",
-            statusCode: 200,
-          });
+        const responseJson = commonResponseJson(
+          200,
+          "Login successfully",
+          userData
+        );
+        res.status(200).json({
+          ...responseJson,
+        });
       } else {
         const er = createError(402, "password didn't match");
-        res.status(402).json({error: er, message: "password didn't match", statusCode: 402});
+        const responseJson = commonResponseJson(
+          402,
+          "password didn't match",
+          null,
+          er
+        );
+        res.status(402).json({
+          ...responseJson,
+        });
       }
     }
   } catch (error) {
     const er = createError(404, "User not found");
-    res.status(401).json({error: er, message: "User not found", statusCode: 404});
+    const responseJson = commonResponseJson(404, "User not found", null, er);
+    res.status(401).json({ ...responseJson });
   }
 };
 
 // addusers
-const addUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const addUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const exitingUser = await Users.find({ email: req.body.email });
 
     if (exitingUser.length > 0) {
       const er = createError(500, "Unable to signup, email already exit");
-      res.status(500).json({er, message: "Unable to signup, email already exit", statusCode: 500});
+      const responseJson = commonResponseJson(
+        500,
+        "Unable to signup, email already exit",
+        null,
+        er
+      );
+      res.status(500).json({
+        ...responseJson,
+      });
       return;
     }
     const {
@@ -118,25 +130,43 @@ const addUser = async (
       token,
       expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
     };
-    res.status(200).json({
-      data: userData,
-      message: email + " has been registered successfully",
-      statusCode: 200
-    });
+    const responseJson = commonResponseJson(
+      200,
+      email + " has been registered successfully",
+      userData,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    res.status(401).json({error, message: "Unable to signup! Internal server error", statusCode: 500});
+    const responseJson = commonResponseJson(
+      401,
+      "Unable to signup! Internal server error",
+      null,
+      error
+    );
+    res.status(401).json({ ...responseJson });
   }
 };
 // getallusers
 const getallUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await Users.find({}).select("-password");
-    res
-      .status(200)
-      .json({ data: users, message: "Lists of all users", statusCode: 200 });
+    const responseJson = commonResponseJson(
+      200,
+      "Lists of all users",
+      users,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
     const er = createError(501, "Unable to get users");
-    res.status(401).json({error: er, message: "Unable to get users", statusCode: 501});
+    const responseJson = commonResponseJson(
+      501,
+      "Unable to get users",
+      null,
+      er
+    );
+    res.status(501).json({ ...responseJson });
   }
 };
 
@@ -147,10 +177,17 @@ const getUserDetails = async (
 ) => {
   try {
     const user = await Users.findById({ _id: req.params.id });
-    res.status(200).json({data: [user], message: "User details", statusCode: 200});
+    const responseJson = commonResponseJson(200, "User details", [user], null);
+    res.status(200).json({ ...responseJson });
   } catch (error) {
     const er = createError(501, "Unable to get user details");
-    res.status(401).json({error: er, message: "Unable to get user details", statusCode: 501});
+    const responseJson = commonResponseJson(
+      501,
+      "Unable to get user details",
+      null,
+      er
+    );
+    res.status(501).json({ ...responseJson });
   }
 };
 
@@ -162,29 +199,41 @@ const updateUserDetails = async (
   try {
     await Users.findByIdAndUpdate(req.params.id, req.body);
     const getuser = await Users.findById({ _id: req.params.id });
+    let responseJson = {};
     if (!getuser) {
-      const er = createError(500, "Unable update");
-      res.status(401).json({error: er, message: "Unable update", statusCode: 500});
+      const er = createError(501, "Unable update");
+      responseJson = commonResponseJson(501, "Unable update", null, er);
+      res.status(501).json({ ...responseJson });
       return;
     }
-    res.status(200).json({data: [getuser], message: "Your details has been updated", statusCode: 200});
+    responseJson = commonResponseJson(
+      200,
+      "Your details has been updated",
+      [getuser],
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    const er = createError(500, "Unable update");
-    res.status(401).json({error: er, message: "Unable update", statusCode: 500});
+    const er = createError(501, "Unable update");
+    const responseJson = commonResponseJson(501, "Unable update", null, er);
+    res.status(501).json({ ...responseJson });
   }
 };
 
-const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await Users.findByIdAndDelete({ _id: req.params.id });
-    res.status(200).json({data: user, message: "Your details has been updated", statusCode: 200});
+    const responseJson = commonResponseJson(
+      200,
+      "Your details has been removed",
+      user,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
     const er = createError(500, "Unable Delete");
-    res.status(401).json({error: er, message: "Unable Delete", statusCode: 500});
+    const responseJson = commonResponseJson(500, "Unable Delete", null, er);
+    res.status(500).json({ ...responseJson });
     return;
   }
 };
@@ -193,14 +242,12 @@ const sendOtp = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email } = req.body;
     const OTP = generateOtp();
-    await sendEmail(
-      {
-        from: "rozerbagh@gmail.com",
-        to: email,
-        subject: "OTP for password reset",
-        text: `The OTP for resetting your password is ${OTP}`,
-      }
-    );
+    await sendEmail({
+      from: "rozerbagh@gmail.com",
+      to: email,
+      subject: "OTP for password reset",
+      text: `The OTP for resetting your password is ${OTP}`,
+    });
     // const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_APIKEY}&route=otp&variables_values=${OTP}&flash=1&numbers=${phoneNumber}`;
     // const otpResponse = await fetch(url);
     const data = await Users.findOneAndUpdate(
@@ -209,11 +256,15 @@ const sendOtp = async (req: Request, res: Response, next: NextFunction) => {
         otp: OTP,
       }
     );
-    res
-      .status(200)
-      .json({data, message: "OTP has been send succesfully to your email", statusCode: 200});
+    res.status(200).json({
+      data,
+      message: "OTP has been send succesfully to your email",
+      statusCode: 200,
+    });
   } catch (error) {
-    res.status(401).json({error, message: "Unable to send OTP", statusCode: 500});
+    res
+      .status(401)
+      .json({ error, message: "Unable to send OTP", statusCode: 500 });
     return;
   }
 };

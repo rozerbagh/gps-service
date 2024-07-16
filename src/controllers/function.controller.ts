@@ -3,35 +3,36 @@ import { Model, Document } from "mongoose";
 import Schools, { SchoolsModelInterface } from "../models/schools.model";
 import createError from "http-errors";
 import MBConfigs from "../models/mapboxconfigs.model";
-
+import { commonResponseJson } from "../middlewares/commonResponse";
 export async function getSchoolWithBuses(
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) {
   try {
     const result = await Schools.findById({ _id: req.params.schoolId });
     if (!result) {
       const error = createError(404, "School not found!");
-      res
-        .status(404)
-        .json({ error, message: "School not found!", statusCode: 404 });
+      const responseJson = commonResponseJson(404, "School not found!", null, error);
+      res.status(404).json({ ...responseJson });
       return;
     }
     const schoolsBuses = await result?.getSchoolWithBuses();
-    res.status(200).json({
-      data: [{ ...schoolsBuses._doc, buses: schoolsBuses.buses }],
-      message: "List of buses for the selected Schools",
-      statusCode: 200
-    });
+    const responseJson = commonResponseJson(
+      200,
+      "List of buses for the selected Schools",
+      [{ ...schoolsBuses._doc, buses: schoolsBuses.buses }],
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        err,
-        message: "School not found! Internal server error",
-        statusCode: 500,
-      });
+    const responseJson = commonResponseJson(
+      500,
+      "Internal Server error",
+      null,
+      err
+    );
+    res.status(500).json({ ...responseJson });
     return;
   }
 }
@@ -54,13 +55,24 @@ export async function getSchoolWithBuses(
 //   }
 // }
 
-export async function showMabConfigs(req: Request, res: Response, next: NextFunction) {
+export async function showMabConfigs(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const data = await MBConfigs.find();
-    res.status(200).json(data[0]);
+    const responseJson = commonResponseJson(200, "Success", data[0], null);
+    res.status(200).json({ ...responseJson });
   } catch (error) {
     const er = createError(500, "Internal server error");
-    res.status(500).json({er, messsage: "Internal server error", statusCode: 500});
+    const responseJson = commonResponseJson(
+      500,
+      "Internal server error",
+      null,
+      er
+    );
+    res.status(500).json({ ...responseJson });
   }
 }
 
@@ -80,13 +92,21 @@ export const fetchRoutes = async <T extends Document>(
       .select("-passwordHash")
       .populate(attr.path)
       .exec();
-    res
-      .status(200)
-      .json({ data, message: "Succesfully fetched !", statusCode: 200 });
+
+    const responseJson = commonResponseJson(
+      200,
+      "Succesfully fetched !",
+      data,
+      null
+    );
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    next();
-    res
-      .status(500)
-      .json({ error, message: "Unable to created !", statusCode: 500 });
+    const responseJson = commonResponseJson(
+      500,
+      "Unable to created !",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };

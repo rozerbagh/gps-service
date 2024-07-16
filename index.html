@@ -36,7 +36,7 @@
     const ws = new WebSocket("ws://174.138.123.193:3006");
 
     ws.addEventListener("open", (event) => {
-      console.log("WebSocket connection opened.", event);
+      // console.log("WebSocket connection opened.", event);
       // Send a message to the server
       // ws.send("Hello, server! This is the browser.");
     });
@@ -44,9 +44,9 @@
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
-      console.log(data, event);
+      // console.log(data, event);
       if (data.type === "SERVER_COORDS_MESSAGE") {
-        console.log("Server coords event response:", data.payload);
+        // console.log("Server coords event response:", data.payload);
       }
     });
     const sendbutton = document.getElementById("sendButton");
