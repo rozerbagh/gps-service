@@ -80,14 +80,14 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
 
     if (exitingUser.length > 0) {
       const er = createError(500, "Unable to signup, email already exit");
-      const responseJson = commonResponseJson(
+      const _responseJson = commonResponseJson(
         500,
         "Unable to signup, email already exit",
         null,
         er
       );
       res.status(500).json({
-        ...responseJson,
+        ..._responseJson,
       });
       return;
     }
