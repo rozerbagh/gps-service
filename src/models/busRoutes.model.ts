@@ -50,7 +50,6 @@ const busesRoutesSchema = new Schema(
       ref: "users",
       require: true,
     },
-    studentsIds: {},
     route_name: { type: String, require: true },
     route_coordinates: { type: [RouteCoordinateSchema], required: true },
     startLat: { type: Number, require: true },
