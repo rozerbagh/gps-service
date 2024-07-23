@@ -43,10 +43,12 @@ const busesRoutesSchema = new Schema(
     busId: {
       type: Schema.Types.ObjectId,
       ref: "buses",
+      require: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      require: true,
     },
     studentsIds: {},
     route_name: { type: String, require: true },
