@@ -20,6 +20,7 @@ export interface IUser {
   subscribed: boolean;
   gps_id: string;
   isSchoolUser: boolean;
+  students: Schema.Types.ObjectId[];
 }
 export interface UserDoc extends mongoose.Document {
   schoolId: mongoose.Schema.Types.ObjectId;
@@ -36,6 +37,7 @@ export interface UserDoc extends mongoose.Document {
   subscribed: boolean;
   gps_id: string;
   isSchoolUser: boolean;
+  students: Schema.Types.ObjectId[];
 }
 export interface UserModelInterface extends Model<UserDoc> {
   build(attr: IUser): UserDoc;
@@ -45,10 +47,12 @@ const userSchema = new Schema(
     schoolId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "schools",
+      require: true,
     },
     busId: {
       type: Schema.Types.ObjectId,
       ref: "buses",
+      require: true,
     },
     username: {
       type: String,
@@ -109,7 +113,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "students" }],
   },
   { timestamps: true }
 );

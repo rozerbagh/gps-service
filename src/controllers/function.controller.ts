@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { Model, Document } from "mongoose";
-import Schools, { SchoolsModelInterface } from "../models/schools.model";
+import Schools from "../models/schools.model";
 import createError from "http-errors";
 import MBConfigs from "../models/mapboxconfigs.model";
+import BusRoutes from "../models/busRoutes.model";
+import Users from "../models/user.model";
 import { commonResponseJson } from "../middlewares/commonResponse";
 export async function getSchoolWithBuses(
   req: Request,
@@ -62,6 +64,35 @@ export async function showMabConfigs(
 ) {
   try {
     const data = await MBConfigs.find();
+    const responseJson = commonResponseJson(200, "Success", data[0], null);
+    res.status(200).json({ ...responseJson });
+  } catch (error) {
+    const er = createError(500, "Internal server error");
+    const responseJson = commonResponseJson(
+      500,
+      "Internal server error",
+      null,
+      er
+    );
+    res.status(500).json({ ...responseJson });
+  }
+}
+
+export const fetchRespectiveBusRoutes = async <T extends Document> (
+  model: Model<T>,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { schoolid, busid, userid } = req.params;
+    const data = await BusRoutes.find({
+      where: {
+        schoolId: schoolid,
+        busId: busid,
+        userId: userid,
+      },
+    });
     const responseJson = commonResponseJson(200, "Success", data[0], null);
     res.status(200).json({ ...responseJson });
   } catch (error) {

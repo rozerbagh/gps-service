@@ -8,12 +8,14 @@ import {
   destroy,
 } from "../controllers/app.controller";
 import {
+  fetchRespectiveBusRoutes,
   getSchoolWithBuses,
   showMabConfigs,
 } from "../controllers/function.controller";
 import Schools from "../models/schools.model";
 import Buses from "../models/buses.model";
 import BusRoutes from "../models/busRoutes.model";
+import Students from "../models/students.model";
 import MBConfigs from "../models/mapboxconfigs.model";
 import { checkToken } from "../middlewares/auth.middleware";
 const router = Router();
@@ -86,6 +88,7 @@ router.get(
     showMabConfigs(req, res, next)
 );
 
+// Bus Routing routes
 router.post(
   "/busroutes/create",
   (req: Request, res: Response, next: NextFunction) =>
@@ -104,10 +107,40 @@ router.get(
     show(BusRoutes, req, res, next, { path: "buses", value: "" })
 );
 
+router.get(
+  "/busroutes/listing/:schoolid/:busid/:userid",
+  (req: Request, res: Response, next: NextFunction) =>
+    fetchRespectiveBusRoutes(BusRoutes, req, res, next)
+);
+
 router.patch(
   "/busroutes/list/:id",
   (req: Request, res: Response, next: NextFunction) =>
     update(BusRoutes, req, res, next)
+);
+
+// Students Routes
+router.post(
+  "/students/create",
+  (req: Request, res: Response, next: NextFunction) =>
+    create(Students, req, res, next)
+);
+
+router.get(
+  "/students/lists",
+  (req: Request, res: Response, next: NextFunction) =>
+    index(Students, req, res, next, { path: "buses", value: "" })
+);
+
+router.get(
+  "/students/list/:id",
+  (req: Request, res: Response, next: NextFunction) =>
+    show(Students, req, res, next, { path: "buses", value: "" })
+);
+router.get(
+  "/students/upadte/:id",
+  (req: Request, res: Response, next: NextFunction) =>
+    update(Students, req, res, next)
 );
 
 export default router;
