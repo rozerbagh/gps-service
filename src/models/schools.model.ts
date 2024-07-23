@@ -12,11 +12,19 @@ interface ISchools {
   name: string;
   address: Address;
   status: number;
+  email: string;
+  phoneno: string;
+  password: string;
+  users: Schema.Types.ObjectId[];
 }
 interface SchoolsDoc extends mongoose.Document {
   name: string;
   address: Address;
   status: number;
+  email: string;
+  phoneno: string;
+  password: string;
+  users: Schema.Types.ObjectId[];
   getSchoolWithBuses: () => any;
 }
 export interface SchoolsModelInterface extends Model<SchoolsDoc> {
@@ -38,6 +46,7 @@ const schoolSchema = new Schema(
       required: true,
       unique: true,
     },
+
     address: {
       type: addressSchema,
       required: true,
@@ -55,6 +64,20 @@ const schoolSchema = new Schema(
       default: 1,
     }, // 0 -inactive , 1-active, 2-hold
     // Other school fields
+    email: {
+      type: Number,
+      default: 1,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    phoneno: {
+      type: String,
+      default: 1,
+      require: true,
+    },
+    users: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   },
   { timestamps: true }
 );

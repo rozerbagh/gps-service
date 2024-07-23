@@ -8,7 +8,9 @@ import {
 import { generateOtp, sendEmail } from "../common/common";
 import Users, { UserDoc } from "../models/user.model";
 import Buses from "../models/buses.model";
+import Students, { StudentDoc } from "../models/students.model";
 import { commonResponseJson } from "../middlewares/commonResponse";
+import { Schema } from "mongoose";
 // userlogin
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -23,8 +25,14 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
         });
         const busid = user.busId;
         const bus = await Buses.findById(busid).exec();
+        const studentPromises = user.students.map(
+          (ele: Schema.Types.ObjectId) => Students.findById(ele).exec()
+        );
+        const students = await Promise.all(studentPromises);
         const userData = {
           userId: user._id,
+          schoolId: user.schoolId,
+          students: students.filter(Boolean),
           email: user.email,
           userName: user.fullname,
           phoneno: user.phoneno,
