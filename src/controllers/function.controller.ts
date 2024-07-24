@@ -93,7 +93,7 @@ export const fetchRespectiveBusRoutes = async <T extends Document> (
         userId: userid,
       },
     });
-    const responseJson = commonResponseJson(200, "Success", data[0], null);
+    const responseJson = commonResponseJson(200, "Success", data, null);
     res.status(200).json({ ...responseJson });
   } catch (error) {
     const er = createError(500, "Internal server error");
