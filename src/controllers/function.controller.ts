@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Model, Document } from "mongoose";
+import mongoose, { Model, Document, Schema } from "mongoose";
 import Schools from "../models/schools.model";
 import createError from "http-errors";
 import MBConfigs from "../models/mapboxconfigs.model";
@@ -86,12 +86,13 @@ export const fetchRespectiveBusRoutes = async <T extends Document> (
 ) => {
   try {
     const { schoolid, busid, userid } = req.params;
+    const schoolObjectId = new mongoose.Types.ObjectId(schoolid);
+    const busObjectId = new mongoose.Types.ObjectId(busid);
+    const userObjectId = new mongoose.Types.ObjectId(userid);
     const data = await BusRoutes.find({
-      where: {
-        schoolId: schoolid,
-        busId: busid,
-        userId: userid,
-      },
+      schoolId: schoolObjectId,
+      busId: busObjectId,
+      userId: userObjectId,
     });
     const responseJson = commonResponseJson(200, "Success", data, null);
     res.status(200).json({ ...responseJson });

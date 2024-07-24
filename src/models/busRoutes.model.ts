@@ -11,9 +11,9 @@ const RouteCoordinateSchema = new Schema<RouteCoordinate>({
   long: { type: Number, required: true },
 });
 interface IBusRoutes {
-  schoolId: Schema.Types.ObjectId;
-  busId: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
+  schoolId: mongoose.Types.ObjectId;
+  busId: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   routes: string;
   startLat: string;
   startLng: string;
@@ -21,9 +21,9 @@ interface IBusRoutes {
   endLng: string;
 }
 interface BusRoutesDoc extends mongoose.Document {
-  schoolId: Schema.Types.ObjectId;
-  busId: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
+  schoolId: mongoose.Types.ObjectId;
+  busId: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   routes: string;
   startLat: string;
   startLng: string;
