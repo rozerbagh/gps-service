@@ -1,61 +1,28 @@
 import { Request, Response, NextFunction } from "express";
-export const create = async (
-  model: any,
+import mongoose, { Model, Document, Schema } from "mongoose";
+import { commonResponseJson } from "../middlewares/commonResponse";
+import Buses from "../models/buses.model";
+export const fetchRespectiveSchoolsBuses = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { title, description } = req.body;
-    const data = new model.build({ title, description });
-    await data.save();
-    res
-      .status(201)
-      .send({ data, message: "Succesfully created !", statusCode: 200 });
+    const { schoolid } = req.params;
+    const schoolObjectId = new mongoose.Types.ObjectId(schoolid);
+    const data = await Buses.find({
+      schoolId: schoolObjectId,
+    });
+    const responseJson = commonResponseJson(200, "Success", data, null);
+    res.status(200).json({ ...responseJson });
   } catch (error) {
-    next();
-    res
-      .status(500)
-      .send({ error, message: "Unable to created !", statusCode: 500 });
-  }
-};
-
-export const index = async (
-  model: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const data = await model.findAll({ where: {} });
-    await data.save();
-    res
-      .status(201)
-      .send({ data, message: "Succesfully created !", statusCode: 200 });
-  } catch (error) {
-    next();
-    res
-      .status(500)
-      .send({ error, message: "Unable to created !", statusCode: 500 });
-  }
-};
-
-export const show = async (
-  model: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const data = await model.find({ where: { id: req.params.id } });
-    await data.save();
-    res
-      .status(201)
-      .send({ data, message: "Succesfully created !", statusCode: 200 });
-  } catch (error) {
-    next();
-    res
-      .status(500)
-      .send({ error, message: "Unable to created !", statusCode: 500 });
+    console.log(error)
+    const responseJson = commonResponseJson(
+      500,
+      "Internal server error",
+      null,
+      error
+    );
+    res.status(500).json({ ...responseJson });
   }
 };

@@ -108,6 +108,32 @@ export const fetchRespectiveBusRoutes = async <T extends Document> (
   }
 }
 
+export const fetchRespectiveSchoolsAllRoutes = async <T extends Document>(
+  model: Model<T>,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { schoolid } = req.params;
+    const schoolObjectId = new mongoose.Types.ObjectId(schoolid);
+    const data = await BusRoutes.find({
+      schoolId: schoolObjectId,
+    });
+    const responseJson = commonResponseJson(200, "Success", data, null);
+    res.status(200).json({ ...responseJson });
+  } catch (error) {
+    const er = createError(500, "Internal server error");
+    const responseJson = commonResponseJson(
+      500,
+      "Internal server error",
+      null,
+      er
+    );
+    res.status(500).json({ ...responseJson });
+  }
+};
+
 export const fetchRoutes = async <T extends Document>(
   model: Model<T>,
   req: Request,
