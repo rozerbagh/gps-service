@@ -1,19 +1,22 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { Model, Schema, Types } from "mongoose";
+import Schools from "./schools.model";
+import Buses from "./buses.model";
 interface IStudent {
-  schoolId: Schema.Types.ObjectId;
-  busId: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
+  schoolId: Types.ObjectId;
+  busId: Types.ObjectId;
+  userId: Types.ObjectId;
   fullname: string;
   class: string;
   description: string;
 }
 export interface StudentDoc extends mongoose.Document {
-  schoolId: Schema.Types.ObjectId;
-  busId: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
+  schoolId: Types.ObjectId;
+  busId: Types.ObjectId;
+  userId: Types.ObjectId;
   fullname: string;
   class: string;
   description: string;
+  getSchoolsBuses: () => any;
 }
 export interface StudentModelInterface extends Model<StudentDoc> {
   build(attr: IStudent): StudentDoc;
@@ -44,5 +47,25 @@ const Student = mongoose.model<StudentDoc, StudentModelInterface>(
 );
 studentSchema.statics.build = (attr: IStudent) => {
   return new Student(attr);
+};
+
+studentSchema.methods.getSchoolsBuses = async function () {
+  try {
+    const studentid = this._id;
+    const student = await Student.findById(studentid);
+    if (!student) {
+      return null;
+    }
+    const schools = await Schools.findById(student.schoolId);
+    const buses = await Buses.findById(student.busId);
+    const studentsSB = {
+      ...student,
+      schools,
+      buses,
+    };
+    return studentsSB;
+  } catch (error) {
+    return null;
+  }
 };
 export default Student;

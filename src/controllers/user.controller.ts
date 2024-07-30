@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Schema } from "mongoose";
 import createError from "http-errors";
 import {
   passwordComparing,
@@ -10,7 +11,6 @@ import Users, { UserDoc } from "../models/user.model";
 import Buses from "../models/buses.model";
 import Students, { StudentDoc } from "../models/students.model";
 import { commonResponseJson } from "../middlewares/commonResponse";
-import { Schema } from "mongoose";
 // userlogin
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -26,7 +26,7 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
         const busid = user.busId;
         const bus = await Buses.findById(busid).exec();
         const studentPromises = user.students.map(
-          (ele: Schema.Types.ObjectId) => Students.findById(ele).exec()
+          (ele: Schema.Types.ObjectId) => Students.findById(ele).populate("schoolId").populate("busId").exec()
         );
         const students = await Promise.all(studentPromises);
         const userData = {
