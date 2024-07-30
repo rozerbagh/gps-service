@@ -1,6 +1,6 @@
 import mongoose, { Model, Schema } from "mongoose";
 interface IBuses {
-  schoolId: Schema.Types.ObjectId;
+  schoolId: mongoose.Types.ObjectId;
   description: string;
   busname: string;
   numberplate: string;
@@ -9,7 +9,7 @@ interface IBuses {
   capacity: number;
 }
 interface BusesDoc extends mongoose.Document {
-  schoolId: Schema.Types.ObjectId;
+  schoolId: mongoose.Types.ObjectId;
   description: string;
   busname: string;
   numberplate: string;

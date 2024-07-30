@@ -7,10 +7,12 @@ import {
   show,
   destroy,
 } from "../controllers/app.controller";
+import { fetchRespectiveSchoolsBuses } from "../controllers/data.controller";
 import {
   fetchRespectiveBusRoutes,
   getSchoolWithBuses,
   showMabConfigs,
+  fetchRespectiveSchoolsAllRoutes,
 } from "../controllers/function.controller";
 import Schools from "../models/schools.model";
 import Buses from "../models/buses.model";
@@ -38,6 +40,12 @@ router.get(
   checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     index(Schools, req, res, next, { path: "", value: "" })
+);
+router.get(
+  "/school/bus/all/:schoolid",
+  checkToken,
+  (req: Request, res: Response, next: NextFunction) =>
+    fetchRespectiveSchoolsBuses(req, res, next)
 );
 router.get(
   "/school/get/:id",
@@ -91,6 +99,7 @@ router.get(
 // Bus Routing routes
 router.post(
   "/busroutes/create",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     create(BusRoutes, req, res, next)
 );
@@ -103,18 +112,24 @@ router.get(
 
 router.get(
   "/busroutes/list/:id",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     show(BusRoutes, req, res, next, { path: "buses", value: "" })
 );
 
 router.get(
   "/busroutes/listing/:schoolid/:busid/:userid",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     fetchRespectiveBusRoutes(BusRoutes, req, res, next)
+);
+router.get("/schoolsbuses", (req: Request, res: Response, next: NextFunction) =>
+  fetchRespectiveSchoolsAllRoutes(BusRoutes, req, res, next)
 );
 
 router.patch(
   "/busroutes/list/:id",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     update(BusRoutes, req, res, next)
 );
@@ -122,23 +137,27 @@ router.patch(
 // Students Routes
 router.post(
   "/students/create",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     create(Students, req, res, next)
 );
 
 router.get(
   "/students/lists",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     index(Students, req, res, next, { path: "buses", value: "" })
 );
 
 router.get(
   "/students/list/:id",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     show(Students, req, res, next, { path: "buses", value: "" })
 );
 router.get(
   "/students/upadte/:id",
+  checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     update(Students, req, res, next)
 );
