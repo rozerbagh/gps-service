@@ -92,7 +92,6 @@ export const fetchRespectiveBusRoutes = async <T extends Document> (
     const data = await BusRoutes.find({
       schoolId: schoolObjectId,
       busId: busObjectId,
-      userId: userObjectId,
     });
     const responseJson = commonResponseJson(200, "Success", data, null);
     res.status(200).json({ ...responseJson });

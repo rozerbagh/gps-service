@@ -7,7 +7,7 @@ import {
   passwordHashing,
 } from "../middlewares/auth.middleware";
 import { generateOtp, sendEmail } from "../common/common";
-import Users, { UserDoc } from "../models/user.model";
+import Users, { UserDoc, UserRoleEnum } from "../models/user.model";
 import Buses from "../models/buses.model";
 import Students, { StudentDoc } from "../models/students.model";
 import { commonResponseJson } from "../middlewares/commonResponse";
@@ -15,6 +15,7 @@ import { commonResponseJson } from "../middlewares/commonResponse";
 const userLogin = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
+    const {loginType} = req.query
     const user = await Users.findOne({ email });
     if (user) {
       const isMatch = await passwordComparing(password, user.password);
@@ -23,15 +24,15 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
           id: user._id.toString(),
           email: user.email,
         });
-        const busid = user.busId;
-        const bus = await Buses.findById(busid).exec();
         const studentPromises = user.students.map(
           (ele: Schema.Types.ObjectId) => Students.findById(ele).populate("schoolId").populate("busId").exec()
         );
         const students = await Promise.all(studentPromises);
+        const busid = user.buses[0];
+        const bus = await Buses.findById(busid).exec();
         const userData = {
           userId: user._id,
-          schoolId: user.schoolId,
+          schoolId: user.schools,
           students: students.filter(Boolean),
           email: user.email,
           userName: user.fullname,
@@ -41,7 +42,7 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
           gps_id: user.gps_id,
           token,
           expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
-          bus: bus
+          bus: user.role == UserRoleEnum.DRIVER
             ? bus
             : {
                 _id: null,
@@ -85,7 +86,6 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
 const addUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const exitingUser = await Users.find({ email: req.body.email });
-
     if (exitingUser.length > 0) {
       const er = createError(500, "Unable to signup, email already exit");
       const _responseJson = commonResponseJson(
@@ -112,6 +112,7 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
       image,
     } = req.body;
     const hashPassword = await passwordHashing(password);
+    const { admin } = req.query;
     const user = new Users({
       busId,
       username,
@@ -120,7 +121,7 @@ const addUser = async (req: Request, res: Response, next: NextFunction) => {
       password: hashPassword,
       phoneno,
       address,
-      role,
+      role: admin ? UserRoleEnum.ADMIN : role,
       status,
       image,
     });
