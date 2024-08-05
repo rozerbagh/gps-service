@@ -42,7 +42,7 @@ const userLogin = async (req: Request, res: Response, next: NextFunction) => {
           gps_id: user.gps_id,
           token,
           expireTokenTime: new Date().getTime() + 60 * 24 * 60 * 60 * 1000,
-          bus: user.role == UserRoleEnum.DRIVER
+          bus: user.role === UserRoleEnum.DRIVER
             ? bus
             : {
                 _id: null,
