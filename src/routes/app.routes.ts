@@ -118,7 +118,7 @@ router.get(
 );
 
 router.get(
-  "/busroutes/listing/:schoolid/:busid/:userid",
+  "/busroutes/listing/:schoolid/:busid",
   checkToken,
   (req: Request, res: Response, next: NextFunction) =>
     fetchRespectiveBusRoutes(BusRoutes, req, res, next)

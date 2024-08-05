@@ -65,7 +65,7 @@ const schoolSchema = new Schema(
     }, // 0 -inactive , 1-active, 2-hold
     // Other school fields
     email: {
-      type: Number,
+      type: String,
       default: 1,
     },
     password: {

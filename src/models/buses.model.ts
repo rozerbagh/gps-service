@@ -1,20 +1,14 @@
 import mongoose, { Model, Schema } from "mongoose";
 interface IBuses {
   schoolId: mongoose.Types.ObjectId;
-  description: string;
   busname: string;
   numberplate: string;
-  drivername: string;
-  driverphoneno: string;
   capacity: number;
 }
 interface BusesDoc extends mongoose.Document {
   schoolId: mongoose.Types.ObjectId;
-  description: string;
   busname: string;
   numberplate: string;
-  drivername: string;
-  driverphoneno: string;
   capacity: number;
 }
 export interface BusesModelInterface extends Model<BusesDoc> {
@@ -28,8 +22,6 @@ const busesSchema = new Schema(
     },
     busname: { type: String, require: true },
     numberplate: { type: String, require: true, unique: true },
-    drivername: { type: String, require: true },
-    driverphoneno: { type: String, require: true },
     capacity: { type: Number, require: true },
   },
   { timestamps: true }

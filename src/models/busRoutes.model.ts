@@ -45,11 +45,6 @@ const busesRoutesSchema = new Schema(
       ref: "buses",
       require: true,
     },
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: "users",
-      require: true,
-    },
     route_name: { type: String, require: true },
     route_coordinates: { type: [RouteCoordinateSchema], required: true },
     startLat: { type: Number, require: true },

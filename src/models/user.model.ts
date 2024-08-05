@@ -1,13 +1,15 @@
 import mongoose, { Model, Schema } from "mongoose";
-const UserRoleEnum = Object.freeze({
+export const UserRoleEnum = {
   ADMIN: 1,
-  USER: 2,
-  DRIVER: 3,
-  MODERATOR: 4,
-});
+  SCHOOLS: 2,
+  PARENTS: 3,
+  DRIVER: 4,
+  STUDENTS: 5,
+};
+
 export interface IUser {
-  schoolId: mongoose.Schema.Types.ObjectId;
-  busId: mongoose.Schema.Types.ObjectId;
+  schools: mongoose.Schema.Types.ObjectId[];
+  buses: mongoose.Schema.Types.ObjectId[];
   username: string;
   fullname: string;
   email: string;
@@ -23,8 +25,8 @@ export interface IUser {
   students: Schema.Types.ObjectId[];
 }
 export interface UserDoc extends mongoose.Document {
-  schoolId: mongoose.Schema.Types.ObjectId;
-  busId: mongoose.Schema.Types.ObjectId;
+  schools: mongoose.Schema.Types.ObjectId[];
+  buses: mongoose.Schema.Types.ObjectId[];
   username: string;
   fullname: string;
   email: string;
@@ -44,16 +46,8 @@ export interface UserModelInterface extends Model<UserDoc> {
 }
 const userSchema = new Schema(
   {
-    schoolId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "schools",
-      require: true,
-    },
-    busId: {
-      type: Schema.Types.ObjectId,
-      ref: "buses",
-      require: true,
-    },
+    schools:[{ type: mongoose.Schema.Types.ObjectId, ref: "schools" }],
+    buses: [{ type: mongoose.Schema.Types.ObjectId, ref: "buses" }],
     username: {
       type: String,
     },
@@ -87,7 +81,7 @@ const userSchema = new Schema(
     role: {
       type: Number,
       require: true,
-      default: UserRoleEnum.USER,
+      default: UserRoleEnum.PARENTS,
     },
     status: {
       type: Number,
@@ -109,18 +103,11 @@ const userSchema = new Schema(
       type: String,
       default: "9172159029",
     },
-    isSchoolUser: {
-      type: Boolean,
-      default: false,
-    },
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: "students" }],
   },
   { timestamps: true }
 );
-const Users = mongoose.model<UserDoc, UserModelInterface>(
-  "users",
-  userSchema
-);
+const Users = mongoose.model<UserDoc, UserModelInterface>("users", userSchema);
 userSchema.statics.build = (attr: IUser) => {
   return new Users(attr);
 };
