@@ -26,4 +26,5 @@ export default {
   session_expiry: 30,
   api_authentication: false,
   token_expiresIn: { expiresIn: 3000 },
+  adminToken: "vidyamargamadmin"
 };

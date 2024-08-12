@@ -167,3 +167,41 @@ export const fetchRoutes = async <T extends Document>(
     res.status(500).json({ ...responseJson });
   }
 };
+
+export const updateRespectiveBusRoutes = async(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { schoolid, busid } = req.body;
+    const schoolObjectId = new mongoose.Types.ObjectId(schoolid);
+    const busObjectId = new mongoose.Types.ObjectId(busid);
+    BusRoutes.updateMany(
+      {
+        schoolId: schoolObjectId,
+        busId: busObjectId,
+      },
+      {
+        $set: { default: false },
+      }
+    );
+    const data = await BusRoutes.findByIdAndUpdate(
+      req.params.id, // The ID of the document to update
+      { $set: { default: true } }, // The update operation
+      { new: true } // Optional: Return the updated document
+    );
+    const responseJson = commonResponseJson(200, "Success", data, null);
+    res.status(200).json({ ...responseJson });
+  } catch (error) {
+    console.log(error);
+    const er = createError(500, "Internal server error");
+    const responseJson = commonResponseJson(
+      500,
+      "Internal server error",
+      null,
+      er
+    );
+    res.status(500).json({ ...responseJson });
+  }
+};
