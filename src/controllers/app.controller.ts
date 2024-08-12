@@ -115,6 +115,7 @@ export const update = async <T extends Document>(
   try {
     const data = await model.findByIdAndUpdate({
       where: { id: req.params.id },
+      set: { ...req.body },
     });
     const responseJson = commonResponseJson(
       200,

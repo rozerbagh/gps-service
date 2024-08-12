@@ -13,6 +13,7 @@ import {
   getSchoolWithBuses,
   showMabConfigs,
   fetchRespectiveSchoolsAllRoutes,
+  updateRespectiveBusRoutes,
 } from "../controllers/function.controller";
 import Schools from "../models/schools.model";
 import Buses from "../models/buses.model";
@@ -134,6 +135,13 @@ router.patch(
     update(BusRoutes, req, res, next)
 );
 
+router.patch(
+  "/busroutes/update-default/:id",
+  checkToken,
+  (req: Request, res: Response, next: NextFunction) =>
+    updateRespectiveBusRoutes(req, res, next)
+);
+
 // Students Routes
 router.post(
   "/students/create",
@@ -161,5 +169,6 @@ router.get(
   (req: Request, res: Response, next: NextFunction) =>
     update(Students, req, res, next)
 );
+
 
 export default router;

@@ -19,6 +19,7 @@ interface IBusRoutes {
   startLng: string;
   endLat: string;
   endLng: string;
+  default: boolean;
 }
 interface BusRoutesDoc extends mongoose.Document {
   schoolId: mongoose.Types.ObjectId;
@@ -29,6 +30,7 @@ interface BusRoutesDoc extends mongoose.Document {
   startLng: string;
   endLat: string;
   endLng: string;
+  default: boolean;
 }
 export interface BusRoutesModelInterface extends Model<BusRoutesDoc> {
   build(attr: IBusRoutes): BusRoutesDoc;
@@ -51,6 +53,7 @@ const busesRoutesSchema = new Schema(
     startLng: { type: Number, require: true },
     endLat: { type: Number, require: true },
     endLng: { type: Number, require: true },
+    default: { type: Boolean, require: false },
   },
   { timestamps: true }
 );
