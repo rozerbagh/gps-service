@@ -194,7 +194,6 @@ export const updateRespectiveBusRoutes = async(
     const responseJson = commonResponseJson(200, "Success", data, null);
     res.status(200).json({ ...responseJson });
   } catch (error) {
-    console.log(error);
     const er = createError(500, "Internal server error");
     const responseJson = commonResponseJson(
       500,
