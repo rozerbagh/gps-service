@@ -177,14 +177,15 @@ export const updateRespectiveBusRoutes = async(
     const { schoolid, busid } = req.body;
     const schoolObjectId = new mongoose.Types.ObjectId(schoolid);
     const busObjectId = new mongoose.Types.ObjectId(busid);
-    BusRoutes.updateMany(
+    await BusRoutes.updateMany(
       {
         schoolId: schoolObjectId,
         busId: busObjectId,
       },
       {
         $set: { default: false },
-      }
+      },
+      { new: true }
     );
     const data = await BusRoutes.findByIdAndUpdate(
       req.params.id, // The ID of the document to update
