@@ -18,7 +18,7 @@ const corsOptions = {
 };
 app.use(responseEnhancer);
 app.use((req, res, next) => {
-  console.log(req.ip, req.url, req.headers);
+  // console.log(req.ip, req.url, req.headers);
   next();
 });
 // m-lab mongo connection
