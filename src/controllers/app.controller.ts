@@ -142,9 +142,9 @@ export const destroy = async (
   next: NextFunction
 ) => {
   try {
-    const data = await model.findByIdAndRemove({
-      where: { id: req.params.id },
-    });
+    const { id } = req.params;
+    const objectId = new mongoose.Types.ObjectId(id);
+    const data = await model.findByIdAndDelete(objectId);
     const responseJson = commonResponseJson(
       200,
       "Succesfully removed !",
