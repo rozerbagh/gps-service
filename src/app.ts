@@ -17,7 +17,10 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(responseEnhancer);
-
+app.use((req, res, next) => {
+  console.log(req.ip, req.url, req.headers);
+  next();
+});
 // m-lab mongo connection
 mongoose
   .connect(
@@ -61,7 +64,7 @@ app.use("/api/v1/app", appsRoutes);
 app.get("/", (req, res, next) => {
   res.status(200).json({
     message: ".....server is running",
-    credit: "powered by -gps",
+    credit: "powered by vidyamargam",
   });
 });
 app.post("/", (req, res, next) => {

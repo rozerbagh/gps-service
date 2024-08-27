@@ -135,6 +135,13 @@ router.patch(
     update(BusRoutes, req, res, next)
 );
 
+router.delete(
+  "/busroutes/delete/:id",
+  checkToken,
+  (req: Request, res: Response, next: NextFunction) =>
+    destroy(BusRoutes, req, res, next)
+);
+
 router.patch(
   "/busroutes/update-default/:id",
   checkToken,

@@ -34,13 +34,11 @@
   ></script>
   <script>
     const ws = new WebSocket("ws://174.138.123.193:3006");
-
     ws.addEventListener("open", (event) => {
       // console.log("WebSocket connection opened.", event);
       // Send a message to the server
       // ws.send("Hello, server! This is the browser.");
     });
-
     // Handle the message received from the server
     ws.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);

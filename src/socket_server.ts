@@ -218,7 +218,6 @@ function websocketConnection(httpserver: HttpServer): {
       // console.error("Socket error:", err);
     });
   });
-
   return { net: socketserver, ws: wss };
 }
 export { websocketConnection };
