@@ -158,6 +158,7 @@ function handleCustomEvent(payload: any, websocket: Server): void {
 function websocketConnection(httpserver: HttpServer): {
   net: net.Server;
   ws: Server;
+  broadcast: (message: string) => void;
 } {
   const wss = new WebSocket.Server({ server: httpserver });
 
@@ -192,6 +193,14 @@ function websocketConnection(httpserver: HttpServer): {
     });
   });
 
+  const broadcast = (message: string) => {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  };
+
   const socketserver = net.createServer((socket: Socket) => {
     // console.log("GPS tracker connected.");
 
@@ -218,6 +227,6 @@ function websocketConnection(httpserver: HttpServer): {
       // console.error("Socket error:", err);
     });
   });
-  return { net: socketserver, ws: wss };
+  return { net: socketserver, ws: wss, broadcast };
 }
 export { websocketConnection };
