@@ -1,6 +1,7 @@
 import net, { Socket } from "net";
 import WebSocket, { Server } from "ws";
 import { IncomingMessage, Server as HttpServer } from "http";
+import DeviceData from "./models/data.model";
 
 interface GPSData {
   identifier: string;
@@ -205,8 +206,9 @@ function websocketConnection(httpserver: HttpServer): {
     // console.log("GPS tracker connected.");
 
     socket.on("data", (data: Buffer) => {
-      // console.log("GPS data =============== ", data);
       const gpsData = data.toString("utf8");
+      const data1 = new DeviceData({ bufferData: data, convertData: gpsData });
+      data1.save();
       const res = gpsDataFunc(gpsData);
       // console.log(res);
 
