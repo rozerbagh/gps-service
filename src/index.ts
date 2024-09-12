@@ -17,8 +17,8 @@ app.get("/chatevent/stoptrack/:busid/:role", (req, res) => {
       JSON.stringify({
         type: "STOP_BUS_EVENT",
         payload: {
-          busid: busid,
-          role: role,
+          busid,
+          role,
         },
       })
     ); // Broadcast message to all WebSocket clients

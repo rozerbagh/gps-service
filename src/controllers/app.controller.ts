@@ -5,6 +5,7 @@ import { BusesModelInterface } from "../models/buses.model";
 import { SchoolsModelInterface } from "../models/schools.model";
 import { BusRoutesModelInterface } from "../models/busRoutes.model";
 import { StudentModelInterface } from "../models/students.model";
+import { DeviceDataModelInterface } from "../models/data.model";
 import { commonResponseJson } from "../middlewares/commonResponse";
 
 type ModelsInteface =
@@ -12,7 +13,8 @@ type ModelsInteface =
   | BusesModelInterface
   | SchoolsModelInterface
   | BusRoutesModelInterface
-  | StudentModelInterface;
+  | StudentModelInterface
+  | DeviceDataModelInterface;
 
 export const create = async (
   model: ModelsInteface,
