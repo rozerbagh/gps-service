@@ -205,10 +205,10 @@ function websocketConnection(httpserver: HttpServer): {
   const socketserver = net.createServer((socket: Socket) => {
     // console.log("GPS tracker connected.");
 
-    socket.on("data", (data: Buffer) => {
+    socket.on("data", async (data: Buffer) => {
       const gpsData = data.toString("utf8");
       const data1 = new DeviceData({ bufferData: data, convertData: gpsData });
-      data1.save();
+      await data1.save();
       const res = gpsDataFunc(gpsData);
       // console.log(res);
 
