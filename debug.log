@@ -112,9 +112,14 @@ info: server is running on port : 3006 {"timestamp":"2024-10-14 12:41:16"}
 info: GPS socket server is listening on port 3005 _ true {"date":1728889876866,"timestamp":"2024-10-14 12:41:16"}
 info: server is running on port : 3006 {"timestamp":"2024-10-14 18:24:10"}
 info: GPS socket server is listening on port 3005 _ true {"date":1728910450653,"timestamp":"2024-10-14 18:24:10"}
+<<<<<<< HEAD
 info: server is running on port : 3006 {"timestamp":"2024-10-14 18:36:00"}
 info: GPS socket server is listening on port 3005 _ true {"date":1728911160960,"timestamp":"2024-10-14 18:36:00"}
 info: server is running on port : 3006 {"timestamp":"2024-10-14 18:36:07"}
 info: GPS socket server is listening on port 3005 _ true {"date":1728911167642,"timestamp":"2024-10-14 18:36:07"}
 info: server is running on port : 3006 {"timestamp":"2024-10-14 18:36:27"}
 info: GPS socket server is listening on port 3005 _ true {"date":1728911187420,"timestamp":"2024-10-14 18:36:27"}
+=======
+>>>>>>> origin/master
+info: server is running on port : 3006 {"timestamp":"2024-10-14 18:37:22"}
+info: GPS socket server is listening on port 3005 _ true {"date":1728911242850,"timestamp":"2024-10-14 18:37:22"}
