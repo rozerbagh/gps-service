@@ -2,16 +2,8 @@ import net, { Socket } from "net";
 import WebSocket, { Server } from "ws";
 import { IncomingMessage, Server as HttpServer } from "http";
 import DeviceData from "./models/data.model";
-
-interface GPSData {
-  identifier: string;
-  latitude: string;
-  longitude: string;
-  speed: string;
-  date: string;
-  time: string;
-  fields: string[];
-}
+import { WSInterface, GPSData } from "./interface/ws.interface";
+import logger from "./utils/logs";
 
 interface GPSDataFuncResult {
   data: string;
@@ -156,11 +148,48 @@ function handleCustomEvent(payload: any, websocket: Server): void {
   });
 }
 
-function websocketConnection(httpserver: HttpServer): {
-  net: net.Server;
-  ws: Server;
-  broadcast: (message: string) => void;
-} {
+const gpsDeviceDataListen = (
+  socket: Socket,
+  wss: WebSocket.Server,
+  callbackFunc: () => void
+): GPSData | undefined => {
+  let returndata: GPSData | undefined;
+  try {
+    socket.on("data", async (data: Buffer) => {
+      const gpsData = data.toString("utf8");
+      // const data1 = new DeviceData({ bufferData: data, convertData: gpsData });
+      // await data1.save();
+      const res = gpsDataFunc(gpsData);
+      returndata = {
+        identifier: JSON.parse(res.data).identifier,
+        latitude: JSON.parse(res.data).latitude,
+        longitude: JSON.parse(res.data).longitude,
+        speed: JSON.parse(res.data).speed,
+        date: JSON.parse(res.data).date,
+        time: JSON.parse(res.data).time,
+        fields: JSON.parse(res.data).fields,
+      };
+      logger.log({
+        level: "debug",
+        message: res.toString(),
+      });
+
+      if (res.data !== null) {
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(res.data);
+          }
+        });
+      }
+    });
+    callbackFunc();
+    return returndata;
+  } catch (error) {
+    return returndata;
+  }
+};
+
+const websocketConnection = (httpserver: HttpServer): WSInterface => {
   const wss = new WebSocket.Server({ server: httpserver });
 
   wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
@@ -201,34 +230,23 @@ function websocketConnection(httpserver: HttpServer): {
       }
     });
   };
-
+  let netsocket: any = null;
   const socketserver = net.createServer((socket: Socket) => {
-    // console.log("GPS tracker connected.");
-
-    socket.on("data", async (data: Buffer) => {
-      const gpsData = data.toString("utf8");
-      const data1 = new DeviceData({ bufferData: data, convertData: gpsData });
-      await data1.save();
-      const res = gpsDataFunc(gpsData);
-      // console.log(res);
-
-      if (res.data !== null) {
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(res.data);
-          }
-        });
-      }
-    });
-
+    netsocket = socket;
     socket.on("close", () => {
-      // console.log("GPS tracker disconnected.");
+      logger.log({
+        level: "warn",
+        message: "GPS tracker disconnected.",
+      });
     });
 
     socket.on("error", (err: Error) => {
-      // console.error("Socket error:", err);
+      logger.log({
+        level: "error",
+        message: "Socket error:" + err,
+      });
     });
   });
-  return { net: socketserver, ws: wss, broadcast };
-}
-export { websocketConnection };
+  return { net: socketserver, ws: wss, broadcast, netSocket: netsocket };
+};
+export { websocketConnection, gpsDeviceDataListen };
