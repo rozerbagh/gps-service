@@ -32,10 +32,7 @@ export async function startTrack(
       // Use the actual GPS device IP and port
       logger.log({ level: "info", message: "GPS DEVICE CONNECTED IPWISE" });
     });
-    gpsClient?.connect(3005, "127.0.0.1", () => {
-      // Use the actual GPS device IP and port
-      logger.log({ level: "info", message: "GPS DEVICE CONNECTED LOCALLY" });
-    });
+    
     gpsClient?.on("data", async (data: Buffer) => {
       const gpsData = data.toString("utf8");
       const parsedData = JSON.parse(gpsData);
