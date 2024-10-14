@@ -170,7 +170,7 @@ const gpsDeviceDataListen = (
       };
       logger.log({
         level: "debug",
-        message: res.toString(),
+        message: gpsData,
       });
 
       if (res.data !== null) {
