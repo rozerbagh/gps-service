@@ -151,7 +151,6 @@ function handleCustomEvent(payload: any, websocket: Server): void {
 const gpsDeviceDataListen = (
   socket: Socket,
   wss: WebSocket.Server,
-  callbackFunc: () => void
 ): GPSData | undefined => {
   let returndata: GPSData | undefined;
   try {
@@ -182,7 +181,6 @@ const gpsDeviceDataListen = (
         });
       }
     });
-    callbackFunc();
     return returndata;
   } catch (error) {
     return returndata;
@@ -233,6 +231,14 @@ const websocketConnection = (httpserver: HttpServer): WSInterface => {
   let netsocket: any = null;
   const socketserver = net.createServer((socket: Socket) => {
     netsocket = socket;
+    socket.on("data", async (data: Buffer) => {
+      const gpsData = data.toString("utf8");
+      logger.log({
+        level: "info",
+        message: gpsData,
+      });
+      socket.write("Data received: " + gpsData);
+    });
     socket.on("close", () => {
       logger.log({
         level: "warn",

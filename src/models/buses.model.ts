@@ -23,6 +23,7 @@ const busesSchema = new Schema(
     busname: { type: String, require: true },
     numberplate: { type: String, require: true, unique: true },
     capacity: { type: Number, require: true },
+    gpsid: { type: String, require: false, unique: true },
   },
   { timestamps: true }
 );
