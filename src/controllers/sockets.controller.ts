@@ -72,16 +72,6 @@ export async function stopTrack(
   ws: WSInterface
 ) {
   try {
-    if (!gpsClient) {
-      const responseJson = commonResponseJson(
-        200,
-        "GPS client is not running",
-        [],
-        null
-      );
-      return;
-    }
-
     // Close the client connection
     gpsClient?.end();
     gpsClient = null;
