@@ -4,6 +4,7 @@ import { IncomingMessage, Server as HttpServer } from "http";
 import DeviceData from "./models/data.model";
 import { WSInterface, GPSData } from "./interface/ws.interface";
 import logger from "./utils/logs";
+import { GPS_DATA_EVENT, SEND_COORDS, SERVER_COORDS_MESSAGE } from "./utils/socketEvents";
 
 interface GPSDataFuncResult {
   data: string;
@@ -140,7 +141,7 @@ function handleCustomEvent(payload: any, websocket: Server): void {
     if (client.readyState === WebSocket.OPEN) {
       client.send(
         JSON.stringify({
-          type: "SERVER_COORDS_MESSAGE",
+          type: SERVER_COORDS_MESSAGE,
           payload,
         })
       );
@@ -189,7 +190,6 @@ const gpsDeviceDataListen = (
 
 const websocketConnection = (httpserver: HttpServer): WSInterface => {
   const wss = new WebSocket.Server({ server: httpserver });
-
   wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
     // console.log("WebSocket client connected.");
 
@@ -207,7 +207,7 @@ const websocketConnection = (httpserver: HttpServer): WSInterface => {
         return;
       }
 
-      if (data.type === "SEND_COORDS") {
+      if (data.type === SEND_COORDS) {
         handleCustomEvent(data.payload, wss);
       }
     });
@@ -235,9 +235,9 @@ const websocketConnection = (httpserver: HttpServer): WSInterface => {
       const gpsData = data.toString("utf8");
       logger.log({
         level: "info",
-        message: gpsData,
+        message: "Data received from net server " + gpsData,
       });
-      socket.write("Data received: " + gpsData);
+      wss.emit(GPS_DATA_EVENT, gpsData);
     });
     socket.on("close", () => {
       logger.log({
