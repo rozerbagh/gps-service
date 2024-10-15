@@ -24,10 +24,14 @@ export const startGpsClient = (
       message: `Custom event received: ${data}`,
     });
     if (gpsid === identifier){
+      logger.log({
+        level: "debug",
+        message: "Saving the data into DB",
+      });
       BusRoutes.findOneAndUpdate(
         { _id: busRoutesId },
         {
-          $push: { route_coordinates: { latitude, longitude } },
+          $push: { route_coordinates: { lat: latitude, long: longitude } },
         },
         { new: true }
       );
