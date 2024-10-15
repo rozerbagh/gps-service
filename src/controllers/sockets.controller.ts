@@ -1,12 +1,40 @@
 import { Request, Response, NextFunction } from "express";
-import net from "net";
+import WebSocket, { Server } from "ws";
 import { Schema } from "mongoose";
 import BusRoutes from "../models/busRoutes.model";
 import { WSInterface, GPSData } from "../interface/ws.interface";
 import { commonResponseJson } from "../middlewares/commonResponse";
 import logger from "../utils/logs";
-import { gpsDeviceDataListen } from "../socket_server";
-let gpsClient: net.Socket | null = null;
+import { GPS_DATA_EVENT } from "../utils/socketEvents";
+export const startGpsClient = (
+  busRoutesId: Schema.Types.ObjectId,
+  gpsid: string,
+  wss: WSInterface
+) => {
+  wss.ws.on(GPS_DATA_EVENT, (data: any) => {
+    const fields = data.split(",");
+    const identifier = fields[1];
+    const latitude = fields[5];
+    const longitude = fields[7];
+    // const speed = fields[8];
+    // const date = fields[3];
+    // const time = fields[9];
+    logger.log({
+      level: "info",
+      message: `Custom event received: ${data}`,
+    });
+    if (gpsid === identifier){
+      BusRoutes.findOneAndUpdate(
+        { _id: busRoutesId },
+        {
+          $push: { route_coordinates: { latitude, longitude } },
+        },
+        { new: true }
+      );
+    }
+
+  });
+};
 export async function startTrack(
   req: Request,
   res: Response,
@@ -23,30 +51,13 @@ export async function startTrack(
     //     updateDevideDBData(deviceData, result._id);
     //   }
     // }
-    if (gpsClient) {
-      logger.log({ level: "info", message: "GPS client already started" });
-    } else {
-      gpsClient = new net.Socket();
-    }
-    gpsClient?.connect(3005, "174.138.123.193", () => {
-      // Use the actual GPS device IP and port
-      logger.log({ level: "info", message: "GPS DEVICE CONNECTED IPWISE" });
-    });
-    
-    gpsClient?.on("data", async (data: Buffer) => {
-      const gpsData = data.toString("utf8");
-      const parsedData = JSON.parse(gpsData);
-      const { lat, long } = parsedData;
-      logger.log({
-        level: "info",
-        message: `Received GPS Data: Lat: ${lat}, Long: ${long}`,
-      });
-      gpsClient?.write("Hello from client");
-    });
+    const data = new BusRoutes({ ...req.body });
+    const result = await data.save();
+    startGpsClient(result._id, result.gpsId, ws);
     const responseJson = commonResponseJson(
       200,
       "Creation of routes has been started",
-      [],
+      [result],
       null
     );
     res.status(200).json({ ...responseJson });
@@ -61,7 +72,21 @@ export async function startTrack(
     return;
   }
 }
-
+export const stopGpsClient = async (
+  busId: Schema.Types.ObjectId,
+  routename: string
+) => {
+  await BusRoutes.findOneAndUpdate(
+    { _id: busId },
+    { $set: { route_name: routename } },
+    // {
+    //   $push: {
+    //     route_coordinates: { $each: gpsDataStore }, // Store all accumulated coordinates
+    //   },
+    // },
+    { new: true }
+  );
+};
 export async function stopTrack(
   req: Request,
   res: Response,
@@ -70,8 +95,10 @@ export async function stopTrack(
 ) {
   try {
     // Close the client connection
-    gpsClient?.end();
-    gpsClient = null;
+    const { routeId } = req.params;
+    const { routeName } = req.body;
+    const routeid = new Schema.Types.ObjectId(routeId);
+    stopGpsClient(routeid, routeName);
     const responseJson = commonResponseJson(
       200,
       "Routes has been created Succesfully",
@@ -91,7 +118,7 @@ export async function stopTrack(
   }
 }
 
-const updateDevideDBData = async (
+export const updateDevideDBData = async (
   data: GPSData,
   busRouteId: Schema.Types.ObjectId
 ) => {

@@ -14,6 +14,7 @@ interface IBusRoutes {
   schoolId: mongoose.Types.ObjectId;
   busId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
+  gpsId: string;
   routes: string;
   startLat: string;
   startLng: string;
@@ -25,6 +26,7 @@ interface BusRoutesDoc extends mongoose.Document {
   schoolId: mongoose.Types.ObjectId;
   busId: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId;
+  gpsId: string;
   routes: string;
   startLat: string;
   startLng: string;
@@ -54,6 +56,7 @@ const busesRoutesSchema = new Schema(
     endLat: { type: Number, require: true },
     endLng: { type: Number, require: true },
     default: { type: Boolean, require: false },
+    gpsId: { type: String, require: false },
   },
   { timestamps: true }
 );
