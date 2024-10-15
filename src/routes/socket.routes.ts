@@ -6,14 +6,14 @@ const router = Router();
 // const status = ["ordered", "dispatched", "shipped", "delivered"];
 export const allScoketsRoutes = (ws: WSInterface) => {
   router.post(
-    "/start/school/bus/:schoolid/:busid",
+    "/start/school/bus/:schoolid/:busid/:gpsid",
     (req: Request, res: Response, next: NextFunction) => {
       startTrack(req, res, next, ws);
     }
   );
 
-  router.get(
-    "/stop/school/bus/:schoolid/:busid",
+  router.post(
+    "/stop/school/bus/:routeId",
     (req: Request, res: Response, next: NextFunction) => {
       stopTrack(req, res, next, ws);
     }
