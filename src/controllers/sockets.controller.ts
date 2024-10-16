@@ -11,7 +11,7 @@ export const startGpsClient = (
   gpsid: string,
   wss: WSInterface
 ) => {
-  wss.ws.on(GPS_DATA_EVENT, (data: any) => {
+  wss.ws.on(GPS_DATA_EVENT, async (data: any) => {
     const fields = data.split(",");
     const identifier = fields[1];
     const latitude = fields[5];
@@ -24,17 +24,17 @@ export const startGpsClient = (
       message: `Custom event received: ${data}`,
     });
     if (gpsid === identifier){
-      logger.log({
-        level: "debug",
-        message: "Saving the data into DB",
-      });
-      BusRoutes.findOneAndUpdate(
-        { _id: busRoutesId },
+      const updatedRoute = await BusRoutes.findByIdAndUpdate(
+        busRoutesId, // Pass the ID directly here
         {
           $push: { route_coordinates: { lat: latitude, long: longitude } },
         },
-        { new: true }
+        { new: true}
       );
+      logger.log({
+        level: "debug",
+        message: "Updated Data:" + updatedRoute,
+      });
     }
 
   });
